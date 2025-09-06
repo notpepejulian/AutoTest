@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  database:
+    image: mariadb:10.11
+    container_name: todotest-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: todotest_db
+      MYSQL_USER: todotest_user
+      MYSQL_PASSWORD: todotest_pass
+    volumes:
+      - ./database/scripts:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - todotest-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: todotest-frontend
+    restart: unless-stopped
+    ports:
+      - "4321:80"
+    networks:
+      - todotest-network
+    depends_on:
+      - database
+      
+  # Agregar este servicio al docker-compose.yml existente
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: todotest-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "mysql+pymysql://todotest_user:todotest_pass@database:3306/todotest_db"
+    ports:
+      - "8000:8000"
+    networks:
+      - todotest-network
+    depends_on:
+      - database
+    volumes:
+      - ./backend:/app
+
+volumes:
+  db_data:
+
+networks:
+  todotest-network:
+    driver: bridge

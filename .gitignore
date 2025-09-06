@@ -1,0 +1,79 @@
+# Compiled source #
+*.o
+*.obj
+*.dll
+*.exe
+*.so
+*.dylib
+
+# Build directories #
+build/
+bin/
+out/
+
+# Dependency directories #
+node_modules/
+vendor/
+
+# IDE and editor files #
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.idea/
+.vscode/
+
+# Logs #
+*.log
+
+# Environment files #
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS generated files #
+.DS_Store
+Thumbs.db
+
+# Start Generation Here
+# Compiled source #
+*.o
+*.obj
+*.dll
+*.exe
+*.so
+*.dylib
+
+# Build directories #
+build/
+bin/
+out/
+
+# Dependency directories #
+node_modules/
+vendor/
+
+# IDE and editor files #
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.idea/
+.vscode/
+
+# Logs #
+*.log
+
+# Environment files #
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS generated files #
+.DS_Store
+Thumbs.db
+# End Generation Here
