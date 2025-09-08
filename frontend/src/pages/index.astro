@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoTest - Plataforma de Testing Inteligente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen font-inter transition-colors duration-300">
+    <!-- Gradient background -->
+    <div class="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-gray-900 pointer-events-none"></div>
+    
+    <!-- Header -->
+    <header class="relative z-10 border-b border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                            AutoTest
+                        </h1>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Plataforma Inteligente</p>
+                    </div>
+                </div>
+                
+                <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <svg id="theme-icon-light" class="w-5 h-5 text-gray-600 dark:text-gray-400 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <svg id="theme-icon-dark" class="w-5 h-5 text-gray-600 dark:text-gray-400 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="relative z-10 container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section class="text-center py-16 mb-12">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                Evaluación Inteligente
+            </div>
+            <h2 class="text-5xl lg:text-6xl font-bold mb-6">
+                <span class="bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                    Prueba tu
+                </span>
+                <br>
+                <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                    Conocimiento
+                </span>
+            </h2>
+            <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Plataforma moderna para realizar exámenes interactivos con retroalimentación instantánea y análisis detallado de resultados.
+            </p>
+        </section>
+        
+        <!-- Loading spinner -->
+        <div id="loading" class="text-center py-12">
+            <div class="relative inline-block">
+                <div class="w-16 h-16 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
+                <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-cyan-400 dark:border-r-cyan-600 rounded-full animate-spin" style="animation-duration: 1.5s; animation-direction: reverse;"></div>
+            </div>
+            <p class="mt-6 text-gray-600 dark:text-gray-400 text-lg">Cargando categorías...</p>
+        </div>
+        
+        <!-- Main content -->
+        <main id="main-content" class="max-w-6xl mx-auto" style="display: none;">
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-white">Elige tu Área de Evaluación</h3>
+                <p class="text-center text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+                    Selecciona la categoría que deseas evaluar y pon a prueba tus conocimientos con nuestro sistema inteligente.
+                </p>
+            </div>
+            
+            <div id="categorias-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Las categorías se cargarán dinámicamente -->
+            </div>
+            
+            <!-- Features section -->
+            <section class="mt-24 mb-12">
+                <h3 class="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">Por qué elegir AutoTest</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center p-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Evaluación Instantánea</h4>
+                        <p class="text-gray-600 dark:text-gray-400">Recibe resultados inmediatos con explicaciones detalladas para cada respuesta.</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Análisis Avanzado</h4>
+                        <p class="text-gray-600 dark:text-gray-400">Obtén estadísticas detalladas y seguimiento de tu progreso de aprendizaje.</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Contenido Actualizado</h4>
+                        <p class="text-gray-600 dark:text-gray-400">Base de datos constantemente actualizada con las últimas normativas y conocimientos.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Test interface -->
+        <div id="test-interface" class="max-w-4xl mx-auto" style="display: none;">
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-500 p-6 text-white">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 id="test-title" class="text-2xl font-bold mb-1">Test de Conocimientos</h2>
+                            <p class="text-blue-100">Responde todas las preguntas para obtener tu puntuación</p>
+                        </div>
+                        <button id="back-button" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl transition-colors flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            <span>Volver</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Progress bar -->
+                <div class="p-6 pb-0">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Progreso del Test</span>
+                        <span id="progress-text" class="text-sm font-medium text-blue-600 dark:text-blue-400">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-6">
+                        <div id="progress-fill" class="bg-gradient-to-r from-blue-500 to-cyan-500 h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Question container -->
+                <div id="question-container" class="p-6 pt-0">
+                    <!-- Las preguntas se cargarán dinámicamente -->
+                </div>
+                
+                <!-- Navigation buttons -->
+                <div class="p-6 pt-0 border-t border-gray-200 dark:border-gray-700">
+                    <div id="navigation-buttons" class="flex justify-between items-center">
+                        <button id="prev-button" class="flex items-center space-x-2 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            <span>Anterior</span>
+                        </button>
+                        
+                        <div class="flex space-x-3">
+                            <button id="next-button" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all shadow-lg">
+                                <span>Siguiente</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                            
+                            <button id="finish-button" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg" style="display: none;">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>Finalizar Test</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results interface -->
+        <div id="results-interface" class="max-w-6xl mx-auto" style="display: none;">
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden">
+                <!-- Results header -->
+                <div class="text-center p-8 border-b border-gray-200 dark:border-gray-700">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" id="results-icon">
+                        <!-- Icon will be set dynamically -->
+                    </div>
+                    <h2 class="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Resultados del Test</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Aquí tienes el análisis completo de tu rendimiento</p>
+                </div>
+                
+                <!-- Results summary -->
+                <div id="results-summary" class="p-8">
+                    <!-- Resumen de resultados -->
+                </div>
+                
+                <!-- Detailed results -->
+                <div id="detailed-results" class="px-8 pb-8">
+                    <!-- Resultados detallados -->
+                </div>
+                
+                <!-- Action buttons -->
+                <div class="bg-gray-50 dark:bg-gray-800/50 p-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button id="new-test-button" class="flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all shadow-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <span>Realizar Otro Test</span>
+                    </button>
+                    <button id="share-results" class="flex items-center space-x-2 px-8 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                        </svg>
+                        <span>Compartir Resultados</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="relative z-10 mt-24 border-t border-gray-200/50 dark:border-gray-700/50 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+        <div class="container mx-auto px-4 py-12">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                        AutoTest
+                    </span>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                    Plataforma moderna para evaluación de conocimientos con tecnología de vanguardia.
+                </p>
+                <div class="flex justify-center space-x-6 mb-6">
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.566-1.35 2.14-2.21z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    &copy; 2024 AutoTest. Todos los derechos reservados. Hecho con ❤️ para mejorar el aprendizaje.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Configuración de la API
+        const API_BASE = 'http://localhost:8000/api';
+        
+        // Estado de la aplicación
+        let currentTest = null;
+        let currentQuestion = 0;
+        let userAnswers = [];
+        
+        // Elementos del DOM
+        const loading = document.getElementById('loading');
+        const mainContent = document.getElementById('main-content');
+        const testInterface = document.getElementById('test-interface');
+        const resultsInterface = document.getElementById('results-interface');
+        const categoriasContainer = document.getElementById('categorias-container');
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Theme Management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // Smooth transition effect
+            document.body.style.transition = 'background-color 0.3s ease';
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
+        }
+        
+        // Función para mostrar loading
+        function showLoading(show = true) {
+            loading.style.display = show ? 'block' : 'none';
+        }
+        
+        // Función para mostrar sección
+        function showSection(section) {
+            mainContent.style.display = 'none';
+            testInterface.style.display = 'none';
+            resultsInterface.style.display = 'none';
+            loading.style.display = 'none';
+            
+            section.style.display = 'block';
+        }
+        
+        // Función para cargar exámenes
+        async function loadCategorias() {
+            try {
+                // Intentar cargar exámenes primero, si no funcionan usar categorías
+                let response, items, isExamMode = false;
+                
+                try {
+                    response = await fetch(`${API_BASE}/examenes`);
+                    if (response.ok) {
+                        items = await response.json();
+                        isExamMode = true;
+                    } else {
+                        throw new Error('Examenes no disponibles');
+                    }
+                } catch {
+                    // Fallback a categorías
+                    response = await fetch(`${API_BASE}/categorias`);
+                    items = await response.json();
+                }
+                
+                categoriasContainer.innerHTML = '';
+                
+                const cardData = [
+                    { emoji: '🚗', gradient: 'from-blue-500 to-blue-600', bgColor: 'blue-50', darkBg: 'blue-900/10' },
+                    { emoji: '📋', gradient: 'from-green-500 to-emerald-600', bgColor: 'green-50', darkBg: 'green-900/10' },
+                    { emoji: '🛡️', gradient: 'from-orange-500 to-red-500', bgColor: 'orange-50', darkBg: 'orange-900/10' },
+                    { emoji: '🔧', gradient: 'from-purple-500 to-pink-600', bgColor: 'purple-50', darkBg: 'purple-900/10' },
+                    { emoji: '✨', gradient: 'from-cyan-500 to-blue-500', bgColor: 'cyan-50', darkBg: 'cyan-900/10' }
+                ];
+                
+                items.forEach((categoria, index) => {
+                    const data = cardData[index % cardData.length];
+                    const div = document.createElement('div');
+                    div.className = `group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer`;
+                    
+                    div.innerHTML = `
+                        <div class="absolute inset-0 bg-gradient-to-br ${data.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-16 h-16 bg-gradient-to-br ${data.gradient} rounded-2xl flex items-center justify-center text-2xl shadow-lg">
+                                    ${data.emoji}
+                                </div>
+                                <div class="w-3 h-3 bg-gradient-to-br ${data.gradient} rounded-full opacity-60"></div>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:${data.gradient} group-hover:bg-clip-text transition-all duration-300">
+                                ${categoria.nombre}
+                            </h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                                ${categoria.descripcion}
+                            </p>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                                    Testing Inteligente
+                                </span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                    <span class="text-sm text-green-600 dark:text-green-400 font-medium">Disponible</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    div.addEventListener('click', () => startTest(categoria.id, categoria.nombre));
+                    categoriasContainer.appendChild(div);
+                });
+                
+                // Animación de entrada
+                setTimeout(() => {
+                    const cards = categoriasContainer.querySelectorAll('.group');
+                    cards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(20px)';
+                            card.style.transition = 'all 0.6s ease';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, 50);
+                        }, index * 100);
+                    });
+                }, 100);
+                
+                showSection(mainContent);
+            } catch (error) {
+                console.error('Error cargando categorías:', error);
+                categoriasContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error de Conexión</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">No se pudieron cargar las categorías. Verifica que el backend esté funcionando.</p>
+                        <button onclick="loadCategorias()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            Reintentar
+                        </button>
+                    </div>
+                `;
+                showSection(mainContent);
+            }
+        }
+        
+        // Función para iniciar test
+        async function startTest(categoriaId, categoriaNombre) {
+            try {
+                showLoading();
+                
+                const response = await fetch(`${API_BASE}/test/${categoriaId}?cantidad=5`);
+                if (!response.ok) throw new Error('Error al iniciar el test');
+                const preguntas = await response.json();
+                
+                currentTest = { categoriaId, categoriaNombre, preguntas };
+                currentQuestion = 0;
+                userAnswers = [];
+                
+                document.getElementById('test-title').textContent = `Test: ${categoriaNombre}`;
+                
+                showQuestion();
+                showSection(testInterface);
+                
+            } catch (error) {
+                console.error('Error iniciando test:', error);
+                alert('Error iniciando el test. Inténtalo de nuevo.');
+                showSection(mainContent);
+            }
+        }
+        
+        // Función para mostrar pregunta actual
+        function showQuestion() {
+            const pregunta = currentTest.preguntas[currentQuestion];
+            const questionContainer = document.getElementById('question-container');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            // Actualizar barra de progreso
+            const progress = ((currentQuestion + 1) / currentTest.preguntas.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+            
+            // Mostrar pregunta con animación
+            questionContainer.style.opacity = '0';
+            questionContainer.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                questionContainer.innerHTML = `
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                Pregunta ${currentQuestion + 1} de ${currentTest.preguntas.length}
+                            </span>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">En progreso</span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white leading-relaxed">
+                            ${pregunta.texto_pregunta}
+                        </h3>
+                        
+                        ${pregunta.imagen_url ? `
+                            <div class="mb-6">
+                                <img src="${pregunta.imagen_url}" alt="Imagen de la pregunta" class="max-w-full h-auto rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="space-y-4">
+                        ${pregunta.respuestas.map((respuesta, index) => {
+                            const letters = ['A', 'B', 'C', 'D', 'E'];
+                            return `
+                                <label class="group flex items-start p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200">
+                                    <input type="radio" name="respuesta" value="${respuesta.id}" class="sr-only">
+                                    <div class="flex items-center space-x-4 w-full">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 group-hover:bg-blue-100 dark:group-hover:bg-blue-800 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                            ${letters[index]}
+                                        </div>
+                                        <span class="text-lg text-gray-900 dark:text-white group-hover:text-blue-900 dark:group-hover:text-blue-100 transition-colors flex-1">
+                                            ${respuesta.texto_respuesta}
+                                        </span>
+                                        <div class="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded-full group-hover:border-blue-400 dark:group-hover:border-blue-500 transition-colors relative">
+                                            <div class="absolute inset-0.5 bg-blue-500 rounded-full scale-0 group-hover:scale-0 transition-transform duration-200 radio-indicator"></div>
+                                        </div>
+                                    </div>
+                                </label>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                
+                // Agregar event listeners para las respuestas
+                const radioInputs = questionContainer.querySelectorAll('input[type="radio"]');
+                radioInputs.forEach(input => {
+                    input.addEventListener('change', function() {
+                        // Resetear todos los indicadores
+                        questionContainer.querySelectorAll('.radio-indicator').forEach(indicator => {
+                            indicator.style.transform = 'scale(0)';
+                        });
+                        questionContainer.querySelectorAll('label').forEach(label => {
+                            label.classList.remove('border-blue-400', 'dark:border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/30');
+                            label.classList.add('border-gray-200', 'dark:border-gray-700');
+                        });
+                        
+                        // Activar el seleccionado
+                        const selectedLabel = this.closest('label');
+                        selectedLabel.classList.remove('border-gray-200', 'dark:border-gray-700');
+                        selectedLabel.classList.add('border-blue-400', 'dark:border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/30');
+                        selectedLabel.querySelector('.radio-indicator').style.transform = 'scale(1)';
+                    });
+                });
+                
+                // Restaurar respuesta si existe
+                if (userAnswers[currentQuestion]) {
+                    const radio = questionContainer.querySelector(`input[value="${userAnswers[currentQuestion]}"]`);
+                    if (radio) {
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('change'));
+                    }
+                }
+                
+                // Animación de entrada
+                questionContainer.style.transition = 'all 0.3s ease';
+                questionContainer.style.opacity = '1';
+                questionContainer.style.transform = 'translateY(0)';
+                
+            }, 150);
+            
+            // Actualizar botones
+            updateNavigationButtons();
+        }
+        
+        // Función para actualizar botones de navegación
+        function updateNavigationButtons() {
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            const finishButton = document.getElementById('finish-button');
+            
+            prevButton.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === currentTest.preguntas.length - 1) {
+                nextButton.style.display = 'none';
+                finishButton.style.display = 'inline-block';
+            } else {
+                nextButton.style.display = 'inline-block';
+                finishButton.style.display = 'none';
+            }
+        }
+        
+        // Función para guardar respuesta actual
+        function saveCurrentAnswer() {
+            const selectedAnswer = document.querySelector('input[name="respuesta"]:checked');
+            if (selectedAnswer) {
+                userAnswers[currentQuestion] = parseInt(selectedAnswer.value);
+            }
+        }
+        
+        // Función para finalizar test
+        async function finishTest() {
+            saveCurrentAnswer();
+            
+            // Verificar que todas las preguntas tengan respuesta
+            if (userAnswers.length !== currentTest.preguntas.length || userAnswers.some(answer => answer === undefined)) {
+                alert('Por favor, responde todas las preguntas antes de finalizar.');
+                return;
+            }
+            
+            try {
+                showLoading();
+                
+                // Preparar datos para enviar
+                const respuestas = userAnswers.map((respuestaId, index) => ({
+                    pregunta_id: currentTest.preguntas[index].id,
+                    respuesta_id: respuestaId
+                }));
+                
+                const response = await fetch(`${API_BASE}/validar-respuestas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ respuestas })
+                });
+                
+                if (!response.ok) throw new Error('Error al procesar los resultados');
+                const resultados = await response.json();
+                showResults(resultados);
+                
+            } catch (error) {
+                console.error('Error finalizando test:', error);
+                alert('Error al procesar los resultados. Inténtalo de nuevo.');
+                showSection(testInterface);
+            }
+        }
+        
+        // Función para mostrar resultados
+        function showResults(resultados) {
+            const summaryContainer = document.getElementById('results-summary');
+            const detailedContainer = document.getElementById('detailed-results');
+            const resultsIcon = document.getElementById('results-icon');
+            
+            // Icono dinámico basado en resultado
+            const iconClass = resultados.aprobado ? 'bg-gradient-to-br from-green-400 to-green-600' : 'bg-gradient-to-br from-red-400 to-red-600';
+            const iconSvg = resultados.aprobado ? 
+                '<svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' :
+                '<svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path></svg>';
+            
+            resultsIcon.className = `w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${iconClass}`;
+            resultsIcon.innerHTML = iconSvg;
+            
+            // Resumen con animaciones
+            const statusText = resultados.aprobado ? 'EXCELENTE TRABAJO' : 'SIGUE PRACTICANDO';
+            const statusSubtext = resultados.aprobado ? 'Has superado la evaluación exitosamente' : 'Necesitas mejorar algunos conceptos';
+            const statusClass = resultados.aprobado ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+            
+            summaryContainer.innerHTML = `
+                <div class="text-center mb-8">
+                    <h3 class="${statusClass} text-4xl font-bold mb-2">${statusText}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-lg">${statusSubtext}</p>
+                </div>
+                
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl text-white text-center transform hover:scale-105 transition-transform">
+                        <div class="text-3xl font-bold mb-1" data-counter="${resultados.total_preguntas}">0</div>
+                        <div class="text-blue-100 text-sm font-medium">Total Preguntas</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl text-white text-center transform hover:scale-105 transition-transform">
+                        <div class="text-3xl font-bold mb-1" data-counter="${resultados.correctas}">0</div>
+                        <div class="text-green-100 text-sm font-medium">Respuestas Correctas</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl text-white text-center transform hover:scale-105 transition-transform">
+                        <div class="text-3xl font-bold mb-1" data-counter="${resultados.incorrectas}">0</div>
+                        <div class="text-red-100 text-sm font-medium">Respuestas Incorrectas</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-500 to-orange-500 p-6 rounded-2xl text-white text-center transform hover:scale-105 transition-transform">
+                        <div class="text-3xl font-bold mb-1" data-counter="${resultados.porcentaje}">0</div>
+                        <div class="text-yellow-100 text-sm font-medium">Puntuación Final</div>
+                    </div>
+                </div>
+                
+                <!-- Progress ring -->
+                <div class="flex justify-center mt-8">
+                    <div class="relative w-32 h-32">
+                        <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" class="text-gray-200 dark:text-gray-700"></circle>
+                            <circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="8" fill="none" 
+                                    class="${resultados.aprobado ? 'text-green-500' : 'text-red-500'}" 
+                                    stroke-dasharray="314" 
+                                    stroke-dashoffset="${314 - (314 * resultados.porcentaje / 100)}" 
+                                    stroke-linecap="round"
+                                    style="transition: stroke-dashoffset 2s ease-in-out;"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold ${statusClass}">${resultados.porcentaje}%</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Detalles con mejor diseño
+            detailedContainer.innerHTML = `
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-8">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        Revisión Detallada
+                    </h3>
+                    <div class="space-y-6">
+                        ${resultados.resultados.map((resultado, index) => {
+                            const pregunta = currentTest.preguntas[index];
+                            const isCorrect = resultado.es_correcta;
+                            const borderClass = isCorrect ? 'border-green-200 dark:border-green-800' : 'border-red-200 dark:border-red-800';
+                            const bgClass = isCorrect ? 'bg-green-50 dark:bg-green-900/10' : 'bg-red-50 dark:bg-red-900/10';
+                            const iconClass = isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400';
+                            const iconBg = isCorrect ? 'bg-green-100 dark:bg-green-800' : 'bg-red-100 dark:bg-red-800';
+                            
+                            return `
+                                <div class="border-2 ${borderClass} ${bgClass} rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                                    <div class="flex items-start space-x-4">
+                                        <div class="flex-shrink-0 w-12 h-12 ${iconBg} rounded-full flex items-center justify-center">
+                                            ${isCorrect ? 
+                                                '<svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' :
+                                                '<svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
+                                            }
+                                        </div>
+                                        
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <span class="text-sm font-medium ${iconClass}">Pregunta ${index + 1}</span>
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                                    isCorrect ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+                                                }">
+                                                    ${isCorrect ? 'Correcta' : 'Incorrecta'}
+                                                </span>
+                                            </div>
+                                            
+                                            <h4 class="text-lg font-semibold mb-3 text-gray-900 dark:text-white">${pregunta.texto_pregunta}</h4>
+                                            
+                                            ${resultado.explicacion ? `
+                                                <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 rounded">
+                                                    <p class="text-sm text-blue-800 dark:text-blue-200 italic">
+                                                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        </svg>
+                                                        ${resultado.explicacion}
+                                                    </p>
+                                                </div>
+                                            ` : ''}
+                                            
+                                            <div class="space-y-2">
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Tu respuesta:</span>
+                                                    <span class="text-sm ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} font-medium">
+                                                        ${pregunta.respuestas.find(r => r.id === resultado.respuesta_seleccionada)?.texto_respuesta || 'No respondida'}
+                                                    </span>
+                                                </div>
+                                                
+                                                ${!isCorrect ? `
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Respuesta correcta:</span>
+                                                        <span class="text-sm text-green-600 dark:text-green-400 font-medium">
+                                                            ${pregunta.respuestas.find(r => r.id === resultado.respuesta_correcta)?.texto_respuesta || 'N/A'}
+                                                        </span>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            
+            showSection(resultsInterface);
+            
+            // Animar contadores
+            setTimeout(() => {
+                animateCounters();
+            }, 300);
+        }
+        
+        // Función para animar contadores
+        function animateCounters() {
+            const counters = document.querySelectorAll('[data-counter]');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-counter'));
+                const duration = 2000;
+                const steps = 60;
+                const stepValue = target / steps;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += stepValue;
+                    if (current >= target) {
+                        counter.textContent = target + (counter.textContent.includes('%') ? '%' : '');
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current) + (counter.textContent.includes('%') ? '%' : '');
+                    }
+                }, duration / steps);
+            });
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar tema
+            initTheme();
+            
+            // Cargar categorías
+            loadCategorias();
+            
+            // Event listener para el toggle de tema
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Navegación en el test
+            document.getElementById('prev-button').addEventListener('click', () => {
+                saveCurrentAnswer();
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion();
+                }
+            });
+            
+            document.getElementById('next-button').addEventListener('click', () => {
+                saveCurrentAnswer();
+                if (currentQuestion < currentTest.preguntas.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                }
+            });
+            
+            document.getElementById('finish-button').addEventListener('click', finishTest);
+            
+            document.getElementById('back-button').addEventListener('click', () => {
+                showSection(mainContent);
+            });
+            
+            document.getElementById('new-test-button').addEventListener('click', () => {
+                showSection(mainContent);
+            });
+            
+            // Event listener para compartir resultados
+            document.addEventListener('click', (e) => {
+                if (e.target.id === 'share-results' || e.target.closest('#share-results')) {
+                    shareResults();
+                }
+            });
+        });
+        
+        // Función para compartir resultados
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mis Resultados en AutoTest',
+                    text: `He completado un test en AutoTest. ¡Comprueba tus conocimientos también!`,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copiar al portapapeles
+                const textToCopy = `He completado un test en AutoTest. ¡Comprueba tus conocimientos también! ${window.location.href}`;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // Mostrar notificación
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform';
+                    notification.textContent = 'Enlace copiado al portapapeles';
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.style.transform = 'translateX(0)';
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        notification.style.transform = 'translateX(full)';
+                        setTimeout(() => notification.remove(), 300);
+                    }, 3000);
+                });
+            }
+        }
+    </script>
+    
+    <style>
+        .font-inter {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3b82f6, #06b6d4);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #2563eb, #0891b2);
+        }
+    </style>
+</body>
+</html>
