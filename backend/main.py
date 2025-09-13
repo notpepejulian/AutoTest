@@ -56,7 +56,7 @@ def get_preguntas(
 ):
     query = db.query(models.Pregunta).filter(models.Pregunta.es_activa == True)
     
-    if categoria_id:
+    if categoria_id is not None:
         query = query.filter(models.Pregunta.categoria_id == categoria_id)
     if dificultad:
         query = query.filter(models.Pregunta.dificultad == dificultad)
@@ -86,7 +86,7 @@ def generar_test(
     if dificultad:
         query = query.filter(models.Pregunta.dificultad == dificultad)
     
-    preguntas = query.order_by(func.rand()).limit(cantidad).all()
+    preguntas = query.order_by(func.random()).limit(cantidad).all()
     
     if len(preguntas) < cantidad:
         raise HTTPException(

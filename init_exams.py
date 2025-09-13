@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 import requests
 import json
+import time
+from requests.exceptions import RequestException
 
 API_BASE = "http://localhost:8000/api"
+MAX_RETRIES = 3
+RETRY_DELAY = 5
 
 # Banco completo de preguntas de conducción
 banco_preguntas = [
@@ -35,33 +39,40 @@ banco_preguntas = [
     {"texto_pregunta": "¿Qué indica una luz roja en el tablero?", "explicacion": "Una luz roja indica una avería grave que requiere detención inmediata", "categoria_id": 4, "dificultad": "medio", "respuestas": [{"texto_respuesta": "Problema menor", "es_correcta": False, "orden_respuesta": 1}, {"texto_respuesta": "Avería grave, detenerse", "es_correcta": True, "orden_respuesta": 2}, {"texto_respuesta": "Solo advertencia", "es_correcta": False, "orden_respuesta": 3}]}
 ]
 
-def create_questions():
-    """Crear todas las preguntas del banco"""
-    print(f"Creando {len(banco_preguntas)} preguntas...")
-    
-    for i, pregunta_data in enumerate(banco_preguntas):
-        respuestas_data = pregunta_data.pop("respuestas")
-        
+def create_questions_with_retry():
+    """Crear todas las preguntas del banco con reintentos"""
+    for attempt in range(MAX_RETRIES):
         try:
-            # Crear pregunta
-            response = requests.post(f"{API_BASE}/preguntas", 
-                                   json={"respuestas": respuestas_data, **pregunta_data})
-            if response.status_code == 200:
+            print(f"Intento {attempt + 1} de crear preguntas...")
+            for i, pregunta_data in enumerate(banco_preguntas):
+                respuestas_data = pregunta_data.pop("respuestas")
+                response = requests.post(
+                    f"{API_BASE}/preguntas", 
+                    json={"respuestas": respuestas_data, **pregunta_data}
+                )
+                response.raise_for_status()
                 print(f"✓ Pregunta {i+1} creada: {pregunta_data['texto_pregunta'][:50]}...")
+            return True
+        except RequestException as e:
+            print(f"Error en el intento {attempt + 1}: {e}")
+            if attempt < MAX_RETRIES - 1:
+                print(f"Reintentando en {RETRY_DELAY} segundos...")
+                time.sleep(RETRY_DELAY)
             else:
-                print(f"✗ Error creando pregunta {i+1}: {response.text}")
-        except Exception as e:
-            print(f"✗ Error de conexión en pregunta {i+1}: {e}")
+                print("Se alcanzó el máximo número de intentos")
+                return False
 
 def main():
-    print("🚀 Inicializando datos completos para AutoTest")
+    print("Inicializando datos completos para AutoTest")
     print("=" * 50)
     
-    # Crear preguntas
-    create_questions()
+    success = create_questions_with_retry()
     
     print("=" * 50)
-    print("✅ Inicialización completada!")
+    if success:
+        print("Inicialización completada!")
+    else:
+        print("La inicialización falló después de varios intentos")
 
 if __name__ == "__main__":
     main()

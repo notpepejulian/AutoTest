@@ -263,7 +263,7 @@
         </div>
     </footer>
 
-    <script>
+    <script defer>
         // Configuración de la API
         const API_BASE = 'http://localhost:8000/api';
         
@@ -319,7 +319,7 @@
         }
         
         // Función para cargar exámenes
-        async function loadCategorias() {
+        window.loadCategorias = async function() {
             try {
                 // Intentar cargar exámenes primero, si no funcionan usar categorías
                 let response, items, isExamMode = false;
@@ -792,7 +792,7 @@
             initTheme();
             
             // Cargar categorías
-            loadCategorias();
+            //loadCategorias();
             
             // Event listener para el toggle de tema
             themeToggle.addEventListener('click', toggleTheme);
@@ -861,6 +861,7 @@
                 });
             }
         }
+
     </script>
     
     <style>
