@@ -141,6 +141,7 @@ import MainLayout from '../layouts/MainLayout.astro';
   let currentPage = 1;
   let testsPerPage = 8;
   let totalTests = 0;
+  let currentTests = []; // Array to store loaded tests
   
   // Load categories on page load
   document.addEventListener('DOMContentLoaded', async () => {
@@ -173,6 +174,46 @@ import MainLayout from '../layouts/MainLayout.astro';
     }
   }
   
+  async function loadCategoryTests(categoryId) {
+    try {
+      // Load all tests and filter on frontend
+      const response = await fetch(`${API_BASE}/examenes`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const tests = await response.json();
+      currentTests = tests.filter(test => {
+        // Filter tests for the specific category
+        if (categoryId === 5) {
+          // For "Test de examen" category, show mixed and specialized tests
+          return test.categoria_principal_id === 5 || test.nombre.includes('Mixto') || test.nombre.includes('Especializado') || test.nombre.includes('Repaso');
+        } else {
+          return test.categoria_principal_id === categoryId;
+        }
+      });
+      
+      totalTests = currentTests.length;
+      renderCurrentPage();
+      
+    } catch (error) {
+      console.error('Error loading tests:', error);
+      // Fallback to generated tests if API fails
+      currentTests = [];
+      for (let i = 1; i <= 10; i++) {
+        currentTests.push({
+          id: i,
+          nombre: `Test ${i}`,
+          descripcion: 'Test generado dinámicamente',
+          num_preguntas: 30,
+          duracion_minutos: 30
+        });
+      }
+      totalTests = currentTests.length;
+      renderCurrentPage();
+    }
+  }
+  
   async function loadCategories() {
     try {
       const response = await fetch(`${API_BASE}/categorias`);
@@ -194,14 +235,26 @@ import MainLayout from '../layouts/MainLayout.astro';
         categories.forEach((category, index) => {
           const colorData = cardColors[index % cardColors.length];
           
-          // Calculate total tests based on questions available
-          const questionsPerTest = 30;
-          const totalQuestions = category.id === 5 ? 1000 : 500; // Based on our database structure
-          const maxTests = Math.floor(totalQuestions / questionsPerTest);
-          const totalTests = Math.min(maxTests, 50); // Limit to 50 tests max for performance
+          // Get approximate test count based on category
+          let totalTests;
+          switch(category.id) {
+            case 1: // Señales de Tráfico
+            case 2: // Normas de Circulación  
+            case 3: // Seguridad Vial
+            case 4: // Mecánica y Mantenimiento
+              totalTests = 3; // 3 variants per category
+              break;
+            case 5: // Test de examen
+              totalTests = 11; // Mixed tests + specialized tests
+              break;
+            default:
+              totalTests = 10;
+          }
           
           const categoryCard = document.createElement('div');
-          categoryCard.className = `group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer`;
+          // Special styling for "Test de examen" category (id 5)
+          const borderClass = category.id === 5 ? 'border-2 border-blue-400 dark:border-blue-500 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/50 dark:to-cyan-950/50' : 'border border-white/20 dark:border-gray-700/50';
+          categoryCard.className = `group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl ${borderClass} p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer`;
           
           categoryCard.innerHTML = `
             <div class="absolute inset-0 bg-gradient-to-br ${colorData.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300"></div>
@@ -262,23 +315,23 @@ import MainLayout from '../layouts/MainLayout.astro';
     if (testsContainer) testsContainer.classList.add('hidden');
   }
   
-  function showCategoryTests(category, colorData, totalTestsCount) {
+  async function showCategoryTests(category, colorData, totalTestsCount) {
     currentView = 'tests';
     selectedCategory = { ...category, colorData };
-    totalTests = totalTestsCount;
     currentPage = 1;
     
     if (categoryTitle) categoryTitle.textContent = category.nombre;
     if (categoryDescription) categoryDescription.textContent = category.descripcion;
     
-    renderCurrentPage();
+    // Load real tests from database
+    await loadCategoryTests(category.id);
     
     if (categoriesContainer) categoriesContainer.classList.add('hidden');
     if (testsContainer) testsContainer.classList.remove('hidden');
   }
   
   function renderCurrentPage() {
-    if (!selectedCategory || !testsGrid) return;
+    if (!selectedCategory || !testsGrid || currentTests.length === 0) return;
     
     const startIndex = (currentPage - 1) * testsPerPage;
     const endIndex = Math.min(startIndex + testsPerPage, totalTests);
@@ -287,43 +340,51 @@ import MainLayout from '../layouts/MainLayout.astro';
     // Clear current tests
     testsGrid.innerHTML = '';
     
-    // Generate test cards for current page
+    // Generate test cards for current page using real tests
     for (let i = startIndex; i < endIndex; i++) {
-      const testNumber = i + 1;
+      const test = currentTests[i];
+      if (!test) continue;
+      
       const testCard = document.createElement('div');
       testCard.className = `group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-700/50 p-6 transition-all duration-300 hover:-translate-y-1 cursor-pointer`;
+      
+      // Clean test name for display
+      const displayName = test.nombre.replace(/Test\s+/, '').replace(/\s+-\s+Variante\s+\d+/, '');
       
       testCard.innerHTML = `
         <div class="absolute inset-0 bg-gradient-to-br ${selectedCategory.colorData.gradient} opacity-0 group-hover:opacity-5 rounded-xl transition-opacity duration-300"></div>
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 bg-gradient-to-br ${selectedCategory.colorData.gradient} rounded-xl flex items-center justify-center text-lg shadow-md font-bold text-white">
-              ${testNumber}
+            <div class="w-12 h-12 bg-gradient-to-br ${selectedCategory.colorData.gradient} rounded-xl flex items-center justify-center text-sm shadow-md font-bold text-white">
+              ${test.id}
             </div>
-            <div class="w-2 h-2 bg-blue-400 animate-pulse rounded-full"></div>
+            <div class="flex items-center space-x-1">
+              <div class="w-2 h-2 bg-green-400 animate-pulse rounded-full"></div>
+              <span class="text-xs text-green-600 dark:text-green-400 font-medium">Listo</span>
+            </div>
           </div>
           
-          <h4 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">
-            Test ${testNumber}
+          <h4 class="text-lg font-bold mb-2 text-gray-900 dark:text-white line-clamp-1">
+            ${displayName}
           </h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            ${selectedCategory.id === 5 ? 'Test completo de autoescuela' : `Test especializado de ${selectedCategory.nombre.toLowerCase()}`}
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+            ${test.descripcion || 'Test de preparación para el examen teórico de conducir'}
           </p>
           
-          <div class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-            30 preguntas • 30 min
+          <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-4">
+            <span>${test.num_preguntas || 30} preguntas</span>
+            <span>${test.duracion_minutos || 30} min</span>
           </div>
           
           <button class="w-full bg-gradient-to-r ${selectedCategory.colorData.gradient} text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all duration-200 font-medium text-sm">
-            Comenzar
+            Comenzar Test
           </button>
         </div>
       `;
       
       testCard.addEventListener('click', () => {
-        // Add test variant parameter to ensure different questions each time
-        const seed = Date.now() + testNumber;
-        window.location.href = `http://localhost:4321/test-categoria/${selectedCategory.id}/?variant=${testNumber}&seed=${seed}`;
+        // Navigate to test page using the test ID
+        window.location.href = `http://localhost:4321/examen/${test.id}/`;
       });
       
       testsGrid.appendChild(testCard);

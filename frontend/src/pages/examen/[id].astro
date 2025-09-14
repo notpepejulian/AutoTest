@@ -1,0 +1,551 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+// Generate static paths for all available exam IDs
+export async function getStaticPaths() {
+  // Generate paths for exam IDs 1-23 (based on our generated tests)
+  const paths = [];
+  for (let i = 1; i <= 23; i++) {
+    paths.push({ params: { id: i.toString() } });
+  }
+  return paths;
+}
+
+// Get the exam ID from the URL
+const { id } = Astro.params;
+---
+
+<MainLayout title="Realizando Test - AutoTest" description="Realiza tu test de autoescuela con preguntas oficiales DGT">
+  <div class="max-w-4xl mx-auto">
+    <!-- Loading spinner -->
+    <div id="loading" class="text-center py-16">
+      <div class="relative inline-block">
+        <div class="w-20 h-20 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
+        <div class="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-cyan-400 dark:border-r-cyan-600 rounded-full animate-spin" style="animation-duration: 1.5s; animation-direction: reverse;"></div>
+      </div>
+      <p class="mt-6 text-gray-600 dark:text-gray-400 text-xl">Cargando examen...</p>
+      <p class="mt-2 text-gray-500 dark:text-gray-500 text-sm">Preparando tus preguntas oficiales DGT</p>
+    </div>
+
+    <!-- Test Header (hidden initially) -->
+    <div id="test-header" class="hidden mb-8">
+      <div class="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-6 text-white">
+        <div class="flex justify-between items-start">
+          <div>
+            <h1 id="test-title" class="text-3xl font-bold mb-2">Test de Autoescuela</h1>
+            <p id="test-description" class="text-blue-100 text-lg">Descripción del test</p>
+          </div>
+          <div class="text-right">
+            <div id="timer" class="text-2xl font-bold mb-1">30:00</div>
+            <div class="text-blue-100 text-sm">Tiempo restante</div>
+          </div>
+        </div>
+        
+        <!-- Progress bar -->
+        <div class="mt-6">
+          <div class="flex justify-between text-sm text-blue-100 mb-2">
+            <span>Progreso del examen</span>
+            <span id="progress-text">0%</span>
+          </div>
+          <div class="w-full bg-white/20 rounded-full h-2">
+            <div id="progress-bar" class="bg-white h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Container (hidden initially) -->
+    <div id="question-container" class="hidden">
+      <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 overflow-hidden">
+        <!-- Question Header -->
+        <div class="bg-gray-50 dark:bg-gray-700/50 p-6 border-b border-gray-200 dark:border-gray-600">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              Pregunta <span id="current-question-number">1</span> de <span id="total-questions">30</span>
+            </h2>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              ID: <span id="question-id"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Content -->
+        <div class="p-6">
+          <div id="question-text" class="text-xl text-gray-900 dark:text-white mb-6 leading-relaxed">
+            <!-- Question text will be loaded here -->
+          </div>
+
+          <!-- Answer Options -->
+          <div id="answer-options" class="space-y-3">
+            <!-- Answer options will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="bg-gray-50 dark:bg-gray-700/50 p-6 border-t border-gray-200 dark:border-gray-600">
+          <div class="flex justify-between items-center">
+            <button id="prev-question" class="flex items-center space-x-2 px-6 py-3 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              <span>Anterior</span>
+            </button>
+
+            <div class="flex space-x-3">
+              <button id="next-question" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all shadow-lg">
+                <span>Siguiente</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </button>
+
+              <button id="finish-test" class="hidden flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Finalizar Test</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Container (hidden initially) -->
+    <div id="results-container" class="hidden">
+      <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 overflow-hidden">
+        <!-- Results Header -->
+        <div class="text-center p-8 border-b border-gray-200 dark:border-gray-600">
+          <div id="result-icon" class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center">
+            <!-- Icon will be set by JavaScript -->
+          </div>
+          <h2 class="text-3xl font-bold mb-2 text-gray-900 dark:text-white">¡Test Completado!</h2>
+          <p class="text-gray-600 dark:text-gray-400">Aquí tienes los resultados de tu examen</p>
+        </div>
+
+        <!-- Results Summary -->
+        <div id="results-summary" class="p-8">
+          <!-- Results will be populated by JavaScript -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="bg-gray-50 dark:bg-gray-700/50 p-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <button id="retry-test" class="flex items-center justify-center space-x-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all shadow-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Repetir Test</span>
+          </button>
+          
+          <button id="back-to-tests" class="flex items-center justify-center space-x-2 px-8 py-3 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span>Volver a Tests</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script define:vars={{ examId: id }}>
+  // Configuration
+  const API_BASE = 'http://localhost:8000/api';
+  const EXAM_ID = examId;
+  
+  // State
+  let currentExam = null;
+  let questions = [];
+  let currentQuestionIndex = 0;
+  let answers = {}; // Store user answers
+  let startTime = null;
+  let timerInterval = null;
+  let timeLimit = 30 * 60; // 30 minutes in seconds
+  let timeRemaining = timeLimit;
+
+  // DOM Elements
+  const loading = document.getElementById('loading');
+  const testHeader = document.getElementById('test-header');
+  const questionContainer = document.getElementById('question-container');
+  const resultsContainer = document.getElementById('results-container');
+  const testTitle = document.getElementById('test-title');
+  const testDescription = document.getElementById('test-description');
+  const timer = document.getElementById('timer');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const currentQuestionNumber = document.getElementById('current-question-number');
+  const totalQuestions = document.getElementById('total-questions');
+  const questionId = document.getElementById('question-id');
+  const questionText = document.getElementById('question-text');
+  const answerOptions = document.getElementById('answer-options');
+  const prevButton = document.getElementById('prev-question');
+  const nextButton = document.getElementById('next-question');
+  const finishButton = document.getElementById('finish-test');
+  const resultsSummary = document.getElementById('results-summary');
+  const retryButton = document.getElementById('retry-test');
+  const backToTestsButton = document.getElementById('back-to-tests');
+  const resultIcon = document.getElementById('result-icon');
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadExam();
+    setupEventListeners();
+  });
+
+  function setupEventListeners() {
+    if (prevButton) {
+      prevButton.addEventListener('click', () => {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          displayCurrentQuestion();
+        }
+      });
+    }
+
+    if (nextButton) {
+      nextButton.addEventListener('click', () => {
+        if (currentQuestionIndex < questions.length - 1) {
+          currentQuestionIndex++;
+          displayCurrentQuestion();
+        }
+      });
+    }
+
+    if (finishButton) {
+      finishButton.addEventListener('click', finishTest);
+    }
+
+    if (retryButton) {
+      retryButton.addEventListener('click', () => {
+        window.location.reload();
+      });
+    }
+
+    if (backToTestsButton) {
+      backToTestsButton.addEventListener('click', () => {
+        window.location.href = 'http://localhost:4321/tests/';
+      });
+    }
+  }
+
+  async function loadExam() {
+    try {
+      // Load exam details with questions included
+      const examResponse = await fetch(`${API_BASE}/examenes/${EXAM_ID}`);
+      if (!examResponse.ok) {
+        throw new Error(`Failed to load exam: ${examResponse.status}`);
+      }
+      
+      currentExam = await examResponse.json();
+      
+      // Extract questions from exam response
+      questions = currentExam.preguntas || [];
+      
+      // Initialize test
+      if (testTitle) testTitle.textContent = currentExam.nombre;
+      if (testDescription) testDescription.textContent = currentExam.descripcion || 'Test de preparación para el examen teórico';
+      if (totalQuestions) totalQuestions.textContent = questions.length;
+      
+      timeLimit = (currentExam.duracion_minutos || 30) * 60;
+      timeRemaining = timeLimit;
+      
+      startTest();
+      
+    } catch (error) {
+      console.error('Error loading exam:', error);
+      showError('No se pudo cargar el examen. Por favor, intenta de nuevo.');
+    }
+  }
+
+  function startTest() {
+    // Hide loading, show test interface
+    if (loading) loading.classList.add('hidden');
+    if (testHeader) testHeader.classList.remove('hidden');
+    if (questionContainer) questionContainer.classList.remove('hidden');
+    
+    startTime = Date.now();
+    startTimer();
+    displayCurrentQuestion();
+  }
+
+  function startTimer() {
+    updateTimerDisplay();
+    
+    timerInterval = setInterval(() => {
+      timeRemaining--;
+      updateTimerDisplay();
+      
+      if (timeRemaining <= 0) {
+        clearInterval(timerInterval);
+        finishTest();
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    if (!timer) return;
+    
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    timer.textContent = timeString;
+    
+    // Change color if time is running out
+    if (timeRemaining <= 300) { // 5 minutes or less
+      timer.classList.add('text-red-300');
+    } else if (timeRemaining <= 600) { // 10 minutes or less
+      timer.classList.add('text-yellow-300');
+    }
+  }
+
+  function displayCurrentQuestion() {
+    const question = questions[currentQuestionIndex];
+    if (!question) return;
+    
+    // Update question info
+    if (currentQuestionNumber) currentQuestionNumber.textContent = currentQuestionIndex + 1;
+    if (questionId) questionId.textContent = question.id;
+    if (questionText) questionText.textContent = question.texto_pregunta;
+    
+    // Clear and populate answer options
+    if (answerOptions) {
+      answerOptions.innerHTML = '';
+      
+      question.respuestas.forEach((respuesta, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'relative';
+        
+        const optionButton = document.createElement('button');
+        optionButton.className = `w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${
+          answers[question.id] === index 
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+            : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 bg-white dark:bg-gray-700'
+        }`;
+        
+        optionButton.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+              answers[question.id] === index 
+                ? 'border-blue-500 bg-blue-500' 
+                : 'border-gray-300 dark:border-gray-600'
+            }">
+              ${answers[question.id] === index ? '<div class="w-2 h-2 bg-white rounded-full"></div>' : ''}
+            </div>
+            <span class="flex-1 text-gray-900 dark:text-white">${String.fromCharCode(65 + index)}. ${respuesta.texto_respuesta}</span>
+          </div>
+        `;
+        
+        optionButton.addEventListener('click', () => {
+          answers[question.id] = index;
+          displayCurrentQuestion(); // Refresh to show selection
+        });
+        
+        optionDiv.appendChild(optionButton);
+        answerOptions.appendChild(optionDiv);
+      });
+    }
+    
+    // Update navigation buttons
+    if (prevButton) {
+      prevButton.disabled = currentQuestionIndex === 0;
+    }
+    
+    if (nextButton && finishButton) {
+      if (currentQuestionIndex === questions.length - 1) {
+        nextButton.classList.add('hidden');
+        finishButton.classList.remove('hidden');
+      } else {
+        nextButton.classList.remove('hidden');
+        finishButton.classList.add('hidden');
+      }
+    }
+    
+    // Update progress
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+    
+    if (progressBar) {
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    if (progressText) {
+      progressText.textContent = `${Math.round(progress)}%`;
+    }
+  }
+
+  async function finishTest() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+    }
+    
+    const endTime = Date.now();
+    const testDuration = endTime - startTime;
+    
+    try {
+      // Send answers to backend for validation
+      const results = await validateAnswers();
+      
+      // Hide test interface, show results
+      if (testHeader) testHeader.classList.add('hidden');
+      if (questionContainer) questionContainer.classList.add('hidden');
+      if (resultsContainer) resultsContainer.classList.remove('hidden');
+      
+      displayResults(results, testDuration);
+    } catch (error) {
+      console.error('Error validating answers:', error);
+      showError('Error al procesar los resultados. Por favor, intenta de nuevo.');
+    }
+  }
+
+  async function validateAnswers() {
+    console.log('Starting validation...');
+    console.log('Current answers:', answers);
+    console.log('Questions count:', questions.length);
+    
+    // Prepare answers for backend validation
+    const respuestasUsuario = [];
+    
+    questions.forEach(question => {
+      const userAnswerIndex = answers[question.id];
+      console.log(`Question ${question.id}: user selected index ${userAnswerIndex}`);
+      if (userAnswerIndex !== undefined) {
+        const respuestaId = question.respuestas[userAnswerIndex].id;
+        respuestasUsuario.push({
+          pregunta_id: question.id,
+          respuesta_id: respuestaId
+        });
+        console.log(`Added answer: pregunta_id=${question.id}, respuesta_id=${respuestaId}`);
+      }
+    });
+    
+    console.log('Prepared answers for backend:', respuestasUsuario);
+    
+    // Send to backend for validation
+    console.log('Sending request to backend...');
+    const response = await fetch(`${API_BASE}/validar-respuestas`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ respuestas: respuestasUsuario })
+    });
+    
+    console.log('Response status:', response.status);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Backend error:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const backendResult = await response.json();
+    console.log('Backend result:', backendResult);
+    
+    // Transform backend result to frontend format
+    const detailedResults = backendResult.resultados.map((resultado, index) => {
+      const question = questions.find(q => q.id === resultado.pregunta_id);
+      const userAnswer = answers[question.id];
+      
+      return {
+        question: question.texto_pregunta,
+        userAnswer: userAnswer !== undefined ? question.respuestas[userAnswer].texto_respuesta : 'Sin responder',
+        correctAnswer: question.respuestas.find(r => r.id === resultado.respuesta_correcta)?.texto_respuesta || 'No disponible',
+        isCorrect: resultado.es_correcta,
+        explanation: resultado.explicacion
+      };
+    });
+    
+    return {
+      correctAnswers: backendResult.correctas,
+      totalQuestions: backendResult.total_preguntas,
+      percentage: backendResult.porcentaje,
+      passed: backendResult.aprobado,
+      detailedResults: detailedResults
+    };
+  }
+
+  function displayResults(results, duration) {
+    const durationMinutes = Math.floor(duration / 60000);
+    const durationSeconds = Math.floor((duration % 60000) / 1000);
+    
+    // Set result icon
+    if (resultIcon) {
+      if (results.passed) {
+        resultIcon.className = 'w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center bg-green-100 dark:bg-green-900/20';
+        resultIcon.innerHTML = `<svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>`;
+      } else {
+        resultIcon.className = 'w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/20';
+        resultIcon.innerHTML = `<svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>`;
+      }
+    }
+    
+    // Display summary
+    if (resultsSummary) {
+      resultsSummary.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-gradient-to-br ${results.passed ? 'from-green-500 to-emerald-600' : 'from-red-500 to-pink-600'} rounded-xl p-6 text-white">
+            <h3 class="text-2xl font-bold mb-2">${results.passed ? '¡Aprobado!' : 'No Aprobado'}</h3>
+            <p class="text-lg">${results.percentage}% de aciertos</p>
+            <p class="text-sm opacity-90">${results.correctAnswers} de ${results.totalQuestions} correctas</p>
+          </div>
+          
+          <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white">
+            <h3 class="text-2xl font-bold mb-2">Tiempo</h3>
+            <p class="text-lg">${durationMinutes}m ${durationSeconds}s</p>
+            <p class="text-sm opacity-90">de ${Math.floor(timeLimit / 60)} minutos disponibles</p>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Resultados Detallados:</h4>
+          <div class="max-h-96 overflow-y-auto space-y-3">
+            ${results.detailedResults.map((result, index) => `
+              <div class="p-4 rounded-lg border ${result.isCorrect ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20' : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'}">
+                <div class="flex items-start justify-between mb-2">
+                  <h5 class="font-medium text-gray-900 dark:text-white">Pregunta ${index + 1}</h5>
+                  <span class="text-xs px-2 py-1 rounded-full ${result.isCorrect ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'}">
+                    ${result.isCorrect ? 'Correcta' : 'Incorrecta'}
+                  </span>
+                </div>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">${result.question}</p>
+                <div class="text-xs space-y-1">
+                  <p><span class="font-medium">Tu respuesta:</span> ${result.userAnswer}</p>
+                  ${!result.isCorrect ? `<p><span class="font-medium">Respuesta correcta:</span> ${result.correctAnswer}</p>` : ''}
+                  ${result.explanation ? `<p class="text-gray-600 dark:text-gray-400"><span class="font-medium">Explicación:</span> ${result.explanation}</p>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function showError(message) {
+    if (loading) {
+      loading.innerHTML = `
+        <div class="text-center py-16">
+          <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">${message}</p>
+          <button onclick="window.location.href='http://localhost:4321/tests/'" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            Volver a Tests
+          </button>
+        </div>
+      `;
+    }
+  }
+</script>
+
+</MainLayout>
