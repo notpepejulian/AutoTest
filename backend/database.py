@@ -13,7 +13,8 @@ try:
     
     # Probar la conexión
     with engine.connect() as connection:
-        connection.execute("SELECT 1")
+        from sqlalchemy import text
+        connection.execute(text("SELECT 1"))
         
 except SQLAlchemyError as e:
     print(f"Error al conectar con la base de datos: {e}")

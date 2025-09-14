@@ -203,9 +203,9 @@ def init_full_data(db: Session = Depends(get_db)):
     if not categorias:
         categorias_data = [
             {"nombre": "Señales de Tráfico", "descripcion": "Preguntas sobre señales de circulación"},
-            {"nombre": "Normas de Circulación", "descripcion": "Normativa y reglamentación vial"},
-            {"nombre": "Seguridad Vial", "descripcion": "Conducción segura y defensiva"},
-            {"nombre": "Mecánica y Mantenimiento", "descripcion": "Aspectos técnicos del vehículo"}
+            {"nombre": "Normas de Circulación", "descripcion": "Preguntas sobre normativa y reglamentación vial"},
+            {"nombre": "Seguridad Vial", "descripcion": "Preguntas sobre conducción segura y defensiva"},
+            {"nombre": "Mecánica y Mantenimiento", "descripcion": "Preguntas sobre aspectos técnicos del vehículo"}
         ]
         
         categorias = []
@@ -299,3 +299,37 @@ def init_full_data(db: Session = Depends(get_db)):
 @app.post("/api/init-data")
 def init_data(db: Session = Depends(get_db)):
     return init_full_data(db)
+
+# Nuevo endpoint específico para obtener test por categoría
+@app.get("/api/tests/categoria/{categoria_id}", response_model=List[schemas.PreguntaTest])
+def get_test_by_categoria(
+    categoria_id: int,
+    cantidad: int = 30,
+    db: Session = Depends(get_db)
+):
+    """Endpoint específico para obtener 30 preguntas aleatorias de una categoría"""
+    query = db.query(models.Pregunta).filter(
+        models.Pregunta.categoria_id == categoria_id,
+        models.Pregunta.es_activa == True
+    )
+    
+    preguntas = query.order_by(func.random()).limit(cantidad).all()
+    
+    if len(preguntas) < cantidad:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Solo hay {len(preguntas)} preguntas disponibles para la categoría {categoria_id}"
+        )
+    
+    return preguntas
+
+# Endpoint opcional para gestión de temporizador
+@app.get("/api/tests/temporizador")
+def get_temporizador_config():
+    """Configuración del temporizador para tests"""
+    return {
+        "tiempo_por_pregunta": 60,  # 1 minuto por pregunta
+        "tiempo_total_30_preguntas": 1800,  # 30 minutos total
+        "activado_por_defecto": False,
+        "mensaje": "Temporizador configurado para 1 minuto por pregunta"
+    }
