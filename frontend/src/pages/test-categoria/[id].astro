@@ -46,7 +46,7 @@ if (!id || isNaN(Number(id))) {
                 <input type="checkbox" id="timer-toggle" class="sr-only">
                 <div class="relative">
                   <div class="w-10 h-6 bg-white/20 rounded-full shadow-inner"></div>
-                  <div class="absolute w-4 h-4 bg-white rounded-full shadow -left-1 -top-1 transition-transform duration-300 ease-in-out" id="timer-slider"></div>
+                  <div class="absolute w-4 h-4 bg-white rounded-full shadow left-0.5 top-1 transition-transform duration-300 ease-in-out" id="timer-slider"></div>
                 </div>
               </label>
               <span class="text-sm text-blue-100">Timer</span>
@@ -151,7 +151,7 @@ if (!id || isNaN(Number(id))) {
           <span>Realizar Otro Test</span>
         </button>
         
-        <a href="/" class="flex items-center space-x-2 px-8 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+        <a href="http://localhost:4321/" class="flex items-center space-x-2 px-8 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
           </svg>
@@ -601,7 +601,7 @@ if (!id || isNaN(Number(id))) {
       timerEnabled = this.checked;
       
       if (timerEnabled) {
-        timerSlider.style.transform = 'translateX(16px)';
+        timerSlider.style.transform = 'translateX(20px)';
         timerDisplay.classList.remove('hidden');
         timeRemaining = TIMER_DURATION;
         updateTimerDisplay();
@@ -632,7 +632,7 @@ if (!id || isNaN(Number(id))) {
     
     document.getElementById('back-button').addEventListener('click', () => {
       if (confirm('¿Estás seguro que quieres salir del test? Se perderá todo el progreso.')) {
-        window.location.href = '/';
+        window.location.href = 'http://localhost:4321/tests/';
       }
     });
     

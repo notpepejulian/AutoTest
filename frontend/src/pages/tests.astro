@@ -66,7 +66,7 @@ import MainLayout from '../layouts/MainLayout.astro';
               </span>
             </div>
             
-            <a href="/test-categoria/5" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 font-semibold text-center block">
+            <a href="http://localhost:4321/test-categoria/5/" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 font-semibold text-center block">
               Comenzar Test
             </a>
           </div>
@@ -109,7 +109,6 @@ import MainLayout from '../layouts/MainLayout.astro';
     </section>
 
   </div>
-</MainLayout>
 
 <script>
   // Configuration
@@ -138,12 +137,12 @@ import MainLayout from '../layouts/MainLayout.astro';
       const otherCategories = categories.filter(cat => cat.id !== 5);
       
       // Generate cards for other categories
-      if (otherCategories.length > 0) {
+      if (otherCategories.length > 0 && dynamicTests) {
         const cardColors = [
-          { gradient: 'from-blue-500 to-blue-600', emoji: '🚦', bgColor: 'blue-50', darkBg: 'blue-900/10' },
-          { gradient: 'from-purple-500 to-pink-600', emoji: '📋', bgColor: 'purple-50', darkBg: 'purple-900/10' },
-          { gradient: 'from-orange-500 to-red-500', emoji: '🛡️', bgColor: 'orange-50', darkBg: 'orange-900/10' },
-          { gradient: 'from-cyan-500 to-blue-500', emoji: '🔧', bgColor: 'cyan-50', darkBg: 'cyan-900/10' }
+          { gradient: 'from-blue-500 to-blue-600', emoji: '🚝' },
+          { gradient: 'from-purple-500 to-pink-600', emoji: '📋' },
+          { gradient: 'from-orange-500 to-red-500', emoji: '🛡️' },
+          { gradient: 'from-cyan-500 to-blue-500', emoji: '🔧' }
         ];
         
         otherCategories.forEach((category, index) => {
@@ -154,8 +153,6 @@ import MainLayout from '../layouts/MainLayout.astro';
           
           // Check if category has enough questions (assume 30+ needed)
           const isAvailable = category.id <= 4; // Currently only categories 1-4 might have questions
-          const statusColor = isAvailable ? 'green' : 'yellow';
-          const statusText = isAvailable ? 'Disponible' : 'En desarrollo';
           
           testCard.innerHTML = `
             <div class="absolute inset-0 bg-gradient-to-br ${colorData.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300"></div>
@@ -165,12 +162,12 @@ import MainLayout from '../layouts/MainLayout.astro';
                   ${colorData.emoji}
                 </div>
                 <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 bg-${statusColor}-400 rounded-full ${isAvailable ? 'animate-pulse' : ''}"></div>
-                  <span class="text-sm text-${statusColor}-600 dark:text-${statusColor}-400 font-medium">${statusText}</span>
+                  <div class="w-2 h-2 ${isAvailable ? 'bg-green-400 animate-pulse' : 'bg-yellow-400'} rounded-full"></div>
+                  <span class="text-sm ${isAvailable ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'} font-medium">${isAvailable ? 'Disponible' : 'En desarrollo'}</span>
                 </div>
               </div>
               
-              <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white group-hover:bg-gradient-to-r group-hover:${colorData.gradient} group-hover:bg-clip-text transition-all duration-300">
+              <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
                 ${category.nombre}
               </h3>
               <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
@@ -179,13 +176,13 @@ import MainLayout from '../layouts/MainLayout.astro';
               
               <div class="flex items-center justify-between mb-4">
                 <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                  ${isAvailable ? '10' : '30'} preguntas • ${isAvailable ? '10' : '30'} min
+                  30 preguntas • 30 min
                 </span>
                 ${!isAvailable ? '<span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 rounded-full text-xs font-medium">Próximamente</span>' : ''}
               </div>
               
               ${isAvailable ? 
-                `<a href="/test-categoria/${category.id}" class="w-full bg-gradient-to-r ${colorData.gradient} text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 font-semibold text-center block">
+                `<a href="http://localhost:4321/test-categoria/${category.id}/" class="w-full bg-gradient-to-r ${colorData.gradient} text-white px-6 py-3 rounded-xl hover:opacity-90 transition-all duration-200 font-semibold text-center block">
                   Comenzar Test
                 </a>` :
                 `<button disabled class="w-full bg-gray-400 dark:bg-gray-600 text-white px-6 py-3 rounded-xl font-semibold text-center cursor-not-allowed opacity-50">
@@ -200,30 +197,34 @@ import MainLayout from '../layouts/MainLayout.astro';
       }
       
       // Show tests container and hide loading
-      loading.classList.add('hidden');
-      testsContainer.classList.remove('hidden');
+      if (loading) loading.classList.add('hidden');
+      if (testsContainer) testsContainer.classList.remove('hidden');
       
     } catch (error) {
       console.error('Error loading tests:', error);
       
       // Show error state
-      loading.innerHTML = `
-        <div class="text-center py-12">
-          <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+      if (loading) {
+        loading.innerHTML = `
+          <div class="text-center py-12">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error al cargar tests</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">No se pudieron cargar las categorías disponibles</p>
+            <button onclick="window.location.reload()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+              Reintentar
+            </button>
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error al cargar tests</h3>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">No se pudieron cargar las categorías disponibles</p>
-          <button onclick="window.location.reload()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-            Reintentar
-          </button>
-        </div>
-      `;
+        `;
+      }
       
       // Still show the main test card
-      testsContainer.classList.remove('hidden');
+      if (testsContainer) testsContainer.classList.remove('hidden');
     }
   }
 </script>
+
+</MainLayout>
