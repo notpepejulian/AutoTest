@@ -6,7 +6,7 @@ import MainLayout from '../layouts/MainLayout.astro';
   <div class="max-w-6xl mx-auto">
     <!-- Hero Section -->
     <section class="text-center py-16 mb-12">
-      <div class="inline-flex items-center px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-sm font-medium mb-6">
+      <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
         </svg>
@@ -14,71 +14,77 @@ import MainLayout from '../layouts/MainLayout.astro';
       </div>
       
       <h1 class="text-5xl lg:text-6xl font-bold mb-6">
-        <span class="bg-gradient-to-r from-green-600 to-emerald-500 bg-clip-text text-transparent">
-          Elige tu Test
+        <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+          Elige tu Categoría
         </span>
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-        Selecciona la categoría de test que deseas realizar. Cada test contiene 30 preguntas con temporizador opcional.
+        Selecciona una categoría para ver todos los tests disponibles. Cada categoría ofrece múltiples variantes de examen.
       </p>
     </section>
 
     <!-- Loading spinner -->
     <div id="loading" class="text-center py-12">
       <div class="relative inline-block">
-        <div class="w-16 h-16 border-4 border-green-200 dark:border-green-800 border-t-green-600 dark:border-t-green-400 rounded-full animate-spin"></div>
-        <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-emerald-400 dark:border-r-emerald-600 rounded-full animate-spin" style="animation-duration: 1.5s; animation-direction: reverse;"></div>
+        <div class="w-16 h-16 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
+        <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-cyan-400 dark:border-r-cyan-600 rounded-full animate-spin" style="animation-duration: 1.5s; animation-direction: reverse;"></div>
       </div>
       <p class="mt-6 text-gray-600 dark:text-gray-400 text-lg">Cargando categorías disponibles...</p>
     </div>
 
-    <!-- Tests Grid -->
+    <!-- Categories Grid -->
+    <section id="categories-container" class="hidden">
+      <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Categories will be loaded here -->
+      </div>
+    </section>
+
+    <!-- Tests Grid (shown when a category is selected) -->
     <section id="tests-container" class="hidden">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-        
-        <!-- Test 1: Test Categoria (Principal) -->
-        <div class="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer w-full max-w-sm">
-          <div class="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300"></div>
-          <div class="relative z-10">
-            <div class="flex items-center justify-between mb-6">
-              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center text-2xl shadow-lg">
-                🚗
-              </div>
-              <div class="flex items-center space-x-2">
-                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span class="text-sm text-green-600 dark:text-green-400 font-medium">Disponible</span>
-              </div>
-            </div>
-            
-            <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white group-hover:bg-gradient-to-r group-hover:from-green-500 group-hover:to-emerald-600 group-hover:bg-clip-text transition-all duration-300">
-              Test Completo de Autoescuela
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-              Test integral con 30 preguntas de autoescuela. Incluye señales, normativa, seguridad vial y mecánica básica.
-            </p>
-            
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                30 preguntas • 30 min
-              </span>
-              <span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full text-xs font-medium">
-                Recomendado
-              </span>
-            </div>
-            
-            <a href="http://localhost:4321/test-categoria/5/" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 font-semibold text-center block">
-              Comenzar Test
-            </a>
+      <div class="mb-8">
+        <button id="back-to-categories" class="inline-flex items-center space-x-2 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          <span>Volver a Categorías</span>
+        </button>
+        <div class="flex justify-between items-center mt-4 mb-2">
+          <h2 id="category-title" class="text-3xl font-bold text-gray-900 dark:text-white"></h2>
+          <div class="text-sm text-gray-500 dark:text-gray-400" id="pagination-info">
+            <!-- Pagination info will be added here -->
           </div>
         </div>
-
-        <!-- Tests dinámicos se cargarán aquí -->
-        <div id="dynamic-tests"></div>
-
+        <p id="category-description" class="text-gray-600 dark:text-gray-400 mb-8"></p>
       </div>
+      
+      <div id="tests-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Tests will be loaded here -->
+      </div>
+      
+      <!-- Pagination Controls -->
+      <div id="pagination-controls" class="flex justify-center items-center space-x-4 mt-8">
+        <button id="prev-page" class="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          <span>Anterior</span>
+        </button>
+        
+        <div id="page-numbers" class="flex space-x-2">
+          <!-- Page numbers will be added here -->
+        </div>
+        
+        <button id="next-page" class="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          <span>Siguiente</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </section>
 
       <!-- Info Section -->
-      <div class="mt-16 bg-gradient-to-r from-green-600 to-emerald-500 rounded-2xl p-8 text-white text-center">
+      <div class="mt-16 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-8 text-white text-center">
         <h2 class="text-3xl font-bold mb-4">📋 Información de los Tests</h2>
         <div class="grid md:grid-cols-3 gap-6 mt-8">
           <div class="text-center">
@@ -86,7 +92,7 @@ import MainLayout from '../layouts/MainLayout.astro';
               <span class="text-2xl">⏱️</span>
             </div>
             <h4 class="font-semibold mb-2">Temporizador Opcional</h4>
-            <p class="text-green-100 text-sm">Activa el temporizador para simular el examen real (1 min por pregunta)</p>
+            <p class="text-blue-100 text-sm">Activa el temporizador para simular el examen real (1 min por pregunta)</p>
           </div>
           
           <div class="text-center">
@@ -94,7 +100,7 @@ import MainLayout from '../layouts/MainLayout.astro';
               <span class="text-2xl">📊</span>
             </div>
             <h4 class="font-semibold mb-2">Resultados Detallados</h4>
-            <p class="text-green-100 text-sm">Obtén análisis completo con explicaciones de cada respuesta</p>
+            <p class="text-blue-100 text-sm">Obtén análisis completo con explicaciones de cada respuesta</p>
           </div>
           
           <div class="text-center">
@@ -102,7 +108,7 @@ import MainLayout from '../layouts/MainLayout.astro';
               <span class="text-2xl">🔄</span>
             </div>
             <h4 class="font-semibold mb-2">Preguntas Aleatorias</h4>
-            <p class="text-green-100 text-sm">Cada test genera preguntas diferentes para mejor preparación</p>
+            <p class="text-blue-100 text-sm">Cada test genera preguntas diferentes para mejor preparación</p>
           </div>
         </div>
       </div>
@@ -116,15 +122,58 @@ import MainLayout from '../layouts/MainLayout.astro';
   
   // DOM Elements
   const loading = document.getElementById('loading');
+  const categoriesContainer = document.getElementById('categories-container');
   const testsContainer = document.getElementById('tests-container');
-  const dynamicTests = document.getElementById('dynamic-tests');
+  const categoriesGrid = document.getElementById('categories-grid');
+  const testsGrid = document.getElementById('tests-grid');
+  const categoryTitle = document.getElementById('category-title');
+  const categoryDescription = document.getElementById('category-description');
+  const backToCategories = document.getElementById('back-to-categories');
+  const paginationInfo = document.getElementById('pagination-info');
+  const paginationControls = document.getElementById('pagination-controls');
+  const prevPageBtn = document.getElementById('prev-page');
+  const nextPageBtn = document.getElementById('next-page');
+  const pageNumbers = document.getElementById('page-numbers');
   
-  // Load available tests on page load
+  // Current state
+  let currentView = 'categories'; // 'categories' or 'tests'
+  let selectedCategory = null;
+  let currentPage = 1;
+  let testsPerPage = 8;
+  let totalTests = 0;
+  
+  // Load categories on page load
   document.addEventListener('DOMContentLoaded', async () => {
-    await loadAvailableTests();
+    await loadCategories();
+    setupEventListeners();
   });
   
-  async function loadAvailableTests() {
+  function setupEventListeners() {
+    if (backToCategories) {
+      backToCategories.addEventListener('click', () => showCategories());
+    }
+    
+    if (prevPageBtn) {
+      prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderCurrentPage();
+        }
+      });
+    }
+    
+    if (nextPageBtn) {
+      nextPageBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(totalTests / testsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderCurrentPage();
+        }
+      });
+    }
+  }
+  
+  async function loadCategories() {
     try {
       const response = await fetch(`${API_BASE}/categorias`);
       if (!response.ok) {
@@ -133,28 +182,28 @@ import MainLayout from '../layouts/MainLayout.astro';
       
       const categories = await response.json();
       
-      // Filter out the main test category (ID 5) since it's already shown
-      const otherCategories = categories.filter(cat => cat.id !== 5);
-      
-      // Generate cards for other categories
-      if (otherCategories.length > 0 && dynamicTests) {
+      if (categoriesGrid && categories.length > 0) {
         const cardColors = [
-          { gradient: 'from-blue-500 to-blue-600', emoji: '🚝' },
-          { gradient: 'from-purple-500 to-pink-600', emoji: '📋' },
-          { gradient: 'from-orange-500 to-red-500', emoji: '🛡️' },
-          { gradient: 'from-cyan-500 to-blue-500', emoji: '🔧' }
+          { gradient: 'from-blue-500 to-blue-600', emoji: '🚗', color: 'blue' },
+          { gradient: 'from-cyan-500 to-blue-500', emoji: '📋', color: 'cyan' },
+          { gradient: 'from-indigo-500 to-purple-600', emoji: '🛡️', color: 'indigo' },
+          { gradient: 'from-purple-500 to-pink-600', emoji: '🔧', color: 'purple' },
+          { gradient: 'from-blue-600 to-cyan-600', emoji: '🎯', color: 'blue' }
         ];
         
-        otherCategories.forEach((category, index) => {
+        categories.forEach((category, index) => {
           const colorData = cardColors[index % cardColors.length];
           
-          const testCard = document.createElement('div');
-          testCard.className = `group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer w-full max-w-sm`;
+          // Calculate total tests based on questions available
+          const questionsPerTest = 30;
+          const totalQuestions = category.id === 5 ? 1000 : 500; // Based on our database structure
+          const maxTests = Math.floor(totalQuestions / questionsPerTest);
+          const totalTests = Math.min(maxTests, 50); // Limit to 50 tests max for performance
           
-          // Check if category has enough questions (assume 30+ needed)
-          const isAvailable = category.id <= 4; // Currently only categories 1-4 might have questions
+          const categoryCard = document.createElement('div');
+          categoryCard.className = `group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 transition-all duration-300 hover:-translate-y-2 cursor-pointer`;
           
-          testCard.innerHTML = `
+          categoryCard.innerHTML = `
             <div class="absolute inset-0 bg-gradient-to-br ${colorData.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300"></div>
             <div class="relative z-10">
               <div class="flex items-center justify-between mb-6">
@@ -162,8 +211,8 @@ import MainLayout from '../layouts/MainLayout.astro';
                   ${colorData.emoji}
                 </div>
                 <div class="flex items-center space-x-2">
-                  <div class="w-2 h-2 ${isAvailable ? 'bg-green-400 animate-pulse' : 'bg-yellow-400'} rounded-full"></div>
-                  <span class="text-sm ${isAvailable ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'} font-medium">${isAvailable ? 'Disponible' : 'En desarrollo'}</span>
+                  <div class="w-2 h-2 bg-blue-400 animate-pulse rounded-full"></div>
+                  <span class="text-sm text-blue-600 dark:text-blue-400 font-medium">${totalTests} Tests</span>
                 </div>
               </div>
               
@@ -171,59 +220,209 @@ import MainLayout from '../layouts/MainLayout.astro';
                 ${category.nombre}
               </h3>
               <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                ${category.descripcion || 'Test especializado en ' + category.nombre.toLowerCase() + '. Perfecto para enfocar tu estudio.'}
+                ${category.descripcion || 'Categoría especializada con múltiples variantes de examen.'}
               </p>
               
               <div class="flex items-center justify-between mb-4">
                 <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                  30 preguntas • 30 min
+                  30 preguntas cada test
                 </span>
-                ${!isAvailable ? '<span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 rounded-full text-xs font-medium">Próximamente</span>' : ''}
+                <span class="px-3 py-1 bg-${colorData.color}-100 dark:bg-${colorData.color}-900/30 text-${colorData.color}-600 dark:text-${colorData.color}-400 rounded-full text-xs font-medium">
+                  Disponible
+                </span>
               </div>
               
-              ${isAvailable ? 
-                `<a href="http://localhost:4321/test-categoria/${category.id}/" class="w-full bg-gradient-to-r ${colorData.gradient} text-white px-6 py-3 rounded-xl hover:opacity-90 transition-all duration-200 font-semibold text-center block">
-                  Comenzar Test
-                </a>` :
-                `<button disabled class="w-full bg-gray-400 dark:bg-gray-600 text-white px-6 py-3 rounded-xl font-semibold text-center cursor-not-allowed opacity-50">
-                  En desarrollo
-                </button>`
-              }
+              <button class="w-full bg-gradient-to-r ${colorData.gradient} text-white px-6 py-3 rounded-xl hover:opacity-90 transition-all duration-200 font-semibold">
+                Ver Tests Disponibles
+              </button>
             </div>
           `;
           
-          dynamicTests.appendChild(testCard);
+          categoryCard.addEventListener('click', () => showCategoryTests(category, colorData, totalTests));
+          categoriesGrid.appendChild(categoryCard);
         });
       }
       
-      // Show tests container and hide loading
-      if (loading) loading.classList.add('hidden');
-      if (testsContainer) testsContainer.classList.remove('hidden');
+      showCategories();
       
     } catch (error) {
-      console.error('Error loading tests:', error);
+      console.error('Error loading categories:', error);
+      showError();
+    }
+  }
+  
+  function showCategories() {
+    currentView = 'categories';
+    currentPage = 1;
+    selectedCategory = null;
+    totalTests = 0;
+    
+    if (loading) loading.classList.add('hidden');
+    if (categoriesContainer) categoriesContainer.classList.remove('hidden');
+    if (testsContainer) testsContainer.classList.add('hidden');
+  }
+  
+  function showCategoryTests(category, colorData, totalTestsCount) {
+    currentView = 'tests';
+    selectedCategory = { ...category, colorData };
+    totalTests = totalTestsCount;
+    currentPage = 1;
+    
+    if (categoryTitle) categoryTitle.textContent = category.nombre;
+    if (categoryDescription) categoryDescription.textContent = category.descripcion;
+    
+    renderCurrentPage();
+    
+    if (categoriesContainer) categoriesContainer.classList.add('hidden');
+    if (testsContainer) testsContainer.classList.remove('hidden');
+  }
+  
+  function renderCurrentPage() {
+    if (!selectedCategory || !testsGrid) return;
+    
+    const startIndex = (currentPage - 1) * testsPerPage;
+    const endIndex = Math.min(startIndex + testsPerPage, totalTests);
+    const totalPages = Math.ceil(totalTests / testsPerPage);
+    
+    // Clear current tests
+    testsGrid.innerHTML = '';
+    
+    // Generate test cards for current page
+    for (let i = startIndex; i < endIndex; i++) {
+      const testNumber = i + 1;
+      const testCard = document.createElement('div');
+      testCard.className = `group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl border border-white/20 dark:border-gray-700/50 p-6 transition-all duration-300 hover:-translate-y-1 cursor-pointer`;
       
-      // Show error state
-      if (loading) {
-        loading.innerHTML = `
-          <div class="text-center py-12">
-            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
+      testCard.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-br ${selectedCategory.colorData.gradient} opacity-0 group-hover:opacity-5 rounded-xl transition-opacity duration-300"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br ${selectedCategory.colorData.gradient} rounded-xl flex items-center justify-center text-lg shadow-md font-bold text-white">
+              ${testNumber}
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error al cargar tests</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">No se pudieron cargar las categorías disponibles</p>
-            <button onclick="window.location.reload()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-              Reintentar
-            </button>
+            <div class="w-2 h-2 bg-blue-400 animate-pulse rounded-full"></div>
           </div>
-        `;
+          
+          <h4 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">
+            Test ${testNumber}
+          </h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            ${selectedCategory.id === 5 ? 'Test completo de autoescuela' : `Test especializado de ${selectedCategory.nombre.toLowerCase()}`}
+          </p>
+          
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            30 preguntas • 30 min
+          </div>
+          
+          <button class="w-full bg-gradient-to-r ${selectedCategory.colorData.gradient} text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all duration-200 font-medium text-sm">
+            Comenzar
+          </button>
+        </div>
+      `;
+      
+      testCard.addEventListener('click', () => {
+        // Add test variant parameter to ensure different questions each time
+        const seed = Date.now() + testNumber;
+        window.location.href = `http://localhost:4321/test-categoria/${selectedCategory.id}/?variant=${testNumber}&seed=${seed}`;
+      });
+      
+      testsGrid.appendChild(testCard);
+    }
+    
+    // Update pagination info
+    if (paginationInfo) {
+      paginationInfo.textContent = `Página ${currentPage} de ${totalPages} (${totalTests} tests total)`;
+    }
+    
+    // Update pagination controls
+    updatePaginationControls(totalPages);
+  }
+  
+  function updatePaginationControls(totalPages) {
+    // Update prev/next buttons
+    if (prevPageBtn) {
+      prevPageBtn.disabled = currentPage <= 1;
+    }
+    if (nextPageBtn) {
+      nextPageBtn.disabled = currentPage >= totalPages;
+    }
+    
+    // Generate page numbers
+    if (pageNumbers) {
+      pageNumbers.innerHTML = '';
+      
+      // Show max 5 page numbers with current page in center when possible
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 4);
+      
+      // Adjust start if we're near the end
+      if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
       }
       
-      // Still show the main test card
-      if (testsContainer) testsContainer.classList.remove('hidden');
+      // Add first page and ellipsis if needed
+      if (startPage > 1) {
+        addPageButton(1);
+        if (startPage > 2) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.className = 'px-2 py-1 text-gray-500 dark:text-gray-400';
+          pageNumbers.appendChild(ellipsis);
+        }
+      }
+      
+      // Add visible page numbers
+      for (let page = startPage; page <= endPage; page++) {
+        addPageButton(page);
+      }
+      
+      // Add ellipsis and last page if needed
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsis = document.createElement('span');
+          ellipsis.textContent = '...';
+          ellipsis.className = 'px-2 py-1 text-gray-500 dark:text-gray-400';
+          pageNumbers.appendChild(ellipsis);
+        }
+        addPageButton(totalPages);
+      }
     }
+  }
+  
+  function addPageButton(pageNum) {
+    const pageBtn = document.createElement('button');
+    pageBtn.textContent = pageNum;
+    pageBtn.className = currentPage === pageNum
+      ? 'px-3 py-2 bg-blue-500 text-white rounded-lg font-medium'
+      : 'px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors';
+    
+    pageBtn.addEventListener('click', () => {
+      currentPage = pageNum;
+      renderCurrentPage();
+    });
+    
+    pageNumbers.appendChild(pageBtn);
+  }
+  
+  function showError() {
+    if (loading) {
+      loading.innerHTML = `
+        <div class="text-center py-12">
+          <div class="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error al cargar categorías</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">No se pudieron cargar las categorías disponibles</p>
+          <button onclick="window.location.reload()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            Reintentar
+          </button>
+        </div>
+      `;
+    }
+    
+    if (categoriesContainer) categoriesContainer.classList.remove('hidden');
   }
 </script>
 
