@@ -183,7 +183,7 @@ class GeneradorPreguntasDGT:
             ("En condiciones normales de circulación, " + pregunta_base[0].lower(), 
              pregunta_base[1], pregunta_base[2], pregunta_base[3]),
              
-            ("Según el Reglamento General de Circulación, " + pregunta_base[0].lower(), 
+            ("Como norma general, " + pregunta_base[0].lower(), 
              pregunta_base[1], pregunta_base[2], pregunta_base[3]),
              
             ("De acuerdo con la normativa vigente, " + pregunta_base[0].lower(), 

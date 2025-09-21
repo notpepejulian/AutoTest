@@ -3,9 +3,9 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
 // Generate static paths for all available exam IDs
 export async function getStaticPaths() {
-  // Generate paths for exam IDs 1-23 (based on our generated tests)
+  // Generate paths for exam IDs 1-27 (based on our generated tests)
   const paths = [];
-  for (let i = 1; i <= 23; i++) {
+  for (let i = 1; i <= 27; i++) {
     paths.push({ params: { id: i.toString() } });
   }
   return paths;
@@ -488,24 +488,69 @@ const { id } = Astro.params;
     
     // Display summary
     if (resultsSummary) {
+      const incorrectAnswers = results.totalQuestions - results.correctAnswers;
+      const efficiencyScore = Math.round((results.percentage / 100) * (timeRemaining / timeLimit) * 100);
+      
       resultsSummary.innerHTML = `
-        <div class="grid md:grid-cols-2 gap-6 mb-8">
-          <div class="bg-gradient-to-br ${results.passed ? 'from-green-500 to-emerald-600' : 'from-red-500 to-pink-600'} rounded-xl p-6 text-white">
-            <h3 class="text-2xl font-bold mb-2">${results.passed ? '¡Aprobado!' : 'No Aprobado'}</h3>
-            <p class="text-lg">${results.percentage}% de aciertos</p>
-            <p class="text-sm opacity-90">${results.correctAnswers} de ${results.totalQuestions} correctas</p>
+        <!-- Main Result Card -->
+        <div class="bg-gradient-to-br ${results.passed ? 'from-green-500 via-emerald-500 to-teal-600' : 'from-red-500 via-pink-500 to-purple-600'} rounded-2xl p-8 text-white mb-8 shadow-2xl">
+          <div class="text-center">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full ${results.passed ? 'bg-white/20' : 'bg-white/20'} mb-4">
+              <span class="text-4xl">${results.passed ? '🎉' : '📚'}</span>
+            </div>
+            <h3 class="text-4xl font-bold mb-2">${results.passed ? '¡Enhorabuena!' : '¡Sigue Practicando!'}</h3>
+            <p class="text-xl opacity-90 mb-4">${results.passed ? 'Has aprobado el examen' : 'Necesitas mejorar un poco más'}</p>
+            <div class="text-6xl font-black mb-2">${results.percentage}%</div>
+            <p class="text-lg opacity-80">${results.correctAnswers} de ${results.totalQuestions} respuestas correctas</p>
+          </div>
+        </div>
+        
+        <!-- Statistics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div class="bg-gradient-to-br from-green-400 to-green-600 rounded-xl p-4 text-white text-center">
+            <div class="text-2xl font-bold">${results.correctAnswers}</div>
+            <div class="text-sm opacity-80">Correctas</div>
+            <div class="mt-2">
+              <div class="w-full bg-white/20 rounded-full h-2">
+                <div class="bg-white h-2 rounded-full" style="width: ${(results.correctAnswers/results.totalQuestions)*100}%"></div>
+              </div>
+            </div>
           </div>
           
-          <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white">
-            <h3 class="text-2xl font-bold mb-2">Tiempo</h3>
-            <p class="text-lg">${durationMinutes}m ${durationSeconds}s</p>
-            <p class="text-sm opacity-90">de ${Math.floor(timeLimit / 60)} minutos disponibles</p>
+          <div class="bg-gradient-to-br from-red-400 to-red-600 rounded-xl p-4 text-white text-center">
+            <div class="text-2xl font-bold">${incorrectAnswers}</div>
+            <div class="text-sm opacity-80">Incorrectas</div>
+            <div class="mt-2">
+              <div class="w-full bg-white/20 rounded-full h-2">
+                <div class="bg-white h-2 rounded-full" style="width: ${(incorrectAnswers/results.totalQuestions)*100}%"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl p-4 text-white text-center">
+            <div class="text-2xl font-bold">${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}</div>
+            <div class="text-sm opacity-80">Tiempo usado</div>
+            <div class="mt-2">
+              <div class="w-full bg-white/20 rounded-full h-2">
+                <div class="bg-white h-2 rounded-full" style="width: ${((timeLimit - timeRemaining)/timeLimit)*100}%"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl p-4 text-white text-center">
+            <div class="text-2xl font-bold">${efficiencyScore}%</div>
+            <div class="text-sm opacity-80">Eficiencia</div>
+            <div class="mt-2">
+              <div class="w-full bg-white/20 rounded-full h-2">
+                <div class="bg-white h-2 rounded-full" style="width: ${efficiencyScore}%"></div>
+              </div>
+            </div>
           </div>
         </div>
         
         <div class="space-y-4">
           <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Resultados Detallados:</h4>
-          <div class="max-h-96 overflow-y-auto space-y-3">
+          <div class="max-h-96 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
             ${results.detailedResults.map((result, index) => `
               <div class="p-4 rounded-lg border ${result.isCorrect ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20' : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'}">
                 <div class="flex items-start justify-between mb-2">
@@ -547,5 +592,46 @@ const { id } = Astro.params;
     }
   }
 </script>
+
+<!-- Custom Scrollbar Styles -->
+<style>
+  /* Custom scrollbar for detailed results */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #3b82f6 #f1f5f9;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: #1e293b;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2563eb, #0891b2);
+    transform: scale(1.1);
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #60a5fa, #22d3ee);
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  }
+</style>
 
 </MainLayout>

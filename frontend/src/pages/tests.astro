@@ -245,7 +245,7 @@ import MainLayout from '../layouts/MainLayout.astro';
               totalTests = 3; // 3 variants per category
               break;
             case 5: // Test de examen
-              totalTests = 11; // Mixed tests + specialized tests
+              totalTests = 12; // Mixed tests + specialized tests
               break;
             default:
               totalTests = 10;
@@ -294,6 +294,39 @@ import MainLayout from '../layouts/MainLayout.astro';
           categoryCard.addEventListener('click', () => showCategoryTests(category, colorData, totalTests));
           categoriesGrid.appendChild(categoryCard);
         });
+        
+        // Add "Coming Soon" card
+        const comingSoonCard = document.createElement('div');
+        comingSoonCard.className = `group relative bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-dashed border-gray-300 dark:border-gray-600 p-8 transition-all duration-300 hover:shadow-2xl`;
+        
+        comingSoonCard.innerHTML = `
+          <div class="relative z-10 text-center">
+            <div class="flex items-center justify-center mb-6">
+              <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-pink-500 rounded-2xl flex items-center justify-center text-2xl shadow-lg">
+                🚀
+              </div>
+            </div>
+            
+            <h3 class="text-2xl font-bold mb-3 text-gray-700 dark:text-gray-300">
+              Próximamente
+            </h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
+              Estamos trabajando en nuevas categorías y funcionalidades emocionantes. ¡Mantente atent@!
+            </p>
+            
+            <div class="flex items-center justify-center mb-4">
+              <span class="px-4 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full text-sm font-medium">
+                En Desarrollo
+              </span>
+            </div>
+            
+            <div class="w-full bg-gradient-to-r from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 text-gray-600 dark:text-gray-300 px-6 py-3 rounded-xl font-semibold cursor-not-allowed opacity-60">
+              Disponible Pronto
+            </div>
+          </div>
+        `;
+        
+        categoriesGrid.appendChild(comingSoonCard);
       }
       
       showCategories();
