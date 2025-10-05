@@ -1,32 +1,8 @@
 ---
-// Deshabilitar prerender para que esta página se ejecute en el servidor
+// Deshabilitar prerender para que esta página se ejecute en el servidor (SSR)
 export const prerender = false;
 
 import MainLayout from '../../layouts/MainLayout.astro';
-
-// Generate static paths for all available exam IDs
-export async function getStaticPaths() {
-  try {
-    // Obtener IDs reales de exámenes desde el backend
-    const response = await fetch('http://localhost:8000/api/examenes');
-    if (response.ok) {
-      const examenes = await response.json();
-      console.log(`Found ${examenes.length} exams in database`);
-      return examenes.map(examen => ({
-        params: { id: examen.id.toString() }
-      }));
-    }
-  } catch (error) {
-    console.error('Error fetching exam IDs for static paths:', error);
-  }
-  
-  // Fallback: generar paths para más IDs posibles
-  const paths = [];
-  for (let i = 1; i <= 50; i++) {
-    paths.push({ params: { id: i.toString() } });
-  }
-  return paths;
-}
 
 // Get the exam ID from the URL
 const { id } = Astro.params;
@@ -36,13 +12,18 @@ if (!id || isNaN(Number(id))) {
   return Astro.redirect('/tests/');
 }
 
+// Determinar la URL del backend (dentro del contenedor Docker usa 'backend', en desarrollo 'localhost')
+const API_HOST = import.meta.env.PROD ? 'http://backend:8000' : 'http://localhost:8000';
+
 // Verificar que el examen existe en la base de datos
 try {
-  const response = await fetch(`http://localhost:8000/api/examenes/${id}`);
+  const response = await fetch(`${API_HOST}/api/examenes/${id}`);
   if (!response.ok) {
-    console.log(`Exam ${id} not found, redirecting to tests page`);
+    console.log(`Exam ${id} not found (status: ${response.status}), redirecting to tests page`);
     return Astro.redirect('/tests/');
   }
+  const examData = await response.json();
+  console.log(`Exam ${id} loaded successfully: ${examData.nombre}`);
 } catch (error) {
   console.error(`Error checking exam ${id}:`, error);
   return Astro.redirect('/tests/');
@@ -184,7 +165,10 @@ try {
 
 <script define:vars={{ examId: id }}>
   // Configuration
-  const API_BASE = 'http://localhost:8000/api';
+  // Detectar si estamos en el navegador y usar la URL correcta del backend
+  const API_BASE = typeof window !== 'undefined' 
+    ? `${window.location.protocol}//${window.location.hostname}:8000/api`
+    : 'http://localhost:8000/api';
   const EXAM_ID = examId;
   
   // State
@@ -257,7 +241,7 @@ try {
 
     if (backToTestsButton) {
       backToTestsButton.addEventListener('click', () => {
-        window.location.href = 'http://localhost:4321/tests/';
+        window.location.href = '/tests/';
       });
     }
   }
@@ -618,7 +602,7 @@ try {
           </div>
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error</h3>
           <p class="text-gray-600 dark:text-gray-400 mb-4">${message}</p>
-          <button onclick="window.location.href='http://localhost:4321/tests/'" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+          <button onclick="window.location.href='/tests/'" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
             Volver a Tests
           </button>
         </div>

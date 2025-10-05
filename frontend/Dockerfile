@@ -1,31 +1,26 @@
-# Etapa de construcción
-FROM node:18-alpine AS builder
+# Usar Node.js para SSR en runtime
+FROM node:18-alpine
 
 WORKDIR /app
 
 # Copiar package.json y package-lock.json
 COPY package*.json ./
 
-# Instalar todas las dependencias definidas en package.json
-RUN npm install
+# Instalar dependencias de producción
+RUN npm install --omit=dev
 
 # Copiar código fuente
 COPY . .
 
-# Construir proyecto Astro (genera /dist)
+# Construir proyecto Astro (genera /dist con servidor SSR)
 RUN npm run build
 
-# Etapa de producción
-FROM nginx:alpine
-
-WORKDIR /usr/share/nginx/html
-
-# Copiar el build de la etapa anterior
-COPY --from=builder /app/dist ./
-
-# Configuración personalizada de Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-
+# Exponer puerto 80 para AWS Target Group
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Variables de entorno
+ENV HOST=0.0.0.0
+ENV PORT=80
+
+# Ejecutar el servidor Astro standalone
+CMD ["node", "./dist/server/entry.mjs"]

@@ -47,13 +47,18 @@ services:
       dockerfile: Dockerfile
     container_name: autotest_frontend
     restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 80
     ports:
-      - "4321:80"
+      - "4321:80"  # Mapeo: localhost:4321 -> contenedor:80 (para AWS Target Group)
     networks:
       - autotest-network
     depends_on:
-      - database
-      - backend
+      backend:
+        condition: service_started
+      database:
+        condition: service_healthy
 
 volumes:
   db_data:
