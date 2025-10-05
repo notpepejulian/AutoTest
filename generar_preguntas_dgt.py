@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generador de 1000 preguntas oficiales DGT para examen teórico de conducir categoría B
-Basado en normativa oficial española y Reglamento General de Circulación (RGC)
+Basado en normativa oficial española y legislación vigente
 """
 
 import random
@@ -844,7 +844,7 @@ def generar_y_mostrar_preguntas():
     print("🎯 GENERADOR OFICIAL DGT - EXAMEN TEÓRICO CATEGORÍA B")
     print("=" * 60)
     print("📋 Generando banco de 1000 preguntas basadas en normativa española")
-    print("🏛️  Fuente: Reglamento General de Circulación (RGC) y normativas DGT")
+    print("🏦️  Fuente: Normativa española de circulación y DGT")
     print()
     
     generador = GeneradorPreguntasDGT()
