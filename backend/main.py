@@ -1,11 +1,15 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from typing import List
+from typing import List, Optional
 import models
 import schemas
 from database import engine, get_db
+
+# Importar módulo de autenticación
+import auth_backend
 
 # Crear las tablas en la base de datos
 models.Base.metadata.create_all(bind=engine)
@@ -395,3 +399,57 @@ def get_temporizador_config():
         "activado_por_defecto": False,
         "mensaje": "Temporizador configurado para 1 minuto por pregunta"
     }
+
+
+# ============================================================================
+# ENDPOINTS DE AUTENTICACIÓN
+# ============================================================================
+
+@app.post("/api/auth/register", response_model=auth_backend.UsuarioResponse)
+def register(registro: auth_backend.UsuarioRegistro, db: Session = Depends(get_db)):
+    """
+    Registra un nuevo usuario en el sistema
+    """
+    usuario = auth_backend.registrar_usuario(registro, db)
+    return usuario
+
+
+@app.post("/api/auth/login", response_model=auth_backend.Token)
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    """
+    Autentica usuario y devuelve token JWT
+    """
+    return auth_backend.login_usuario(form_data, db)
+
+
+@app.get("/api/auth/me", response_model=auth_backend.UsuarioResponse)
+async def get_me(current_user: Optional[auth_backend.Usuario] = Depends(auth_backend.get_current_user)):
+    """
+    Obtiene información del usuario actual
+    """
+    if not current_user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="No autenticado"
+        )
+    return current_user
+
+
+@app.post("/api/auth/change-password")
+async def change_password(
+    cambio: auth_backend.CambioPassword,
+    current_user: auth_backend.Usuario = Depends(auth_backend.get_current_user_required),
+    db: Session = Depends(get_db)
+):
+    """
+    Cambia la contraseña del usuario actual
+    """
+    return auth_backend.cambiar_password(cambio, current_user, db)
+
+
+@app.post("/api/auth/logout")
+async def logout():
+    """
+    Cierra sesión (en el cliente se debe eliminar el token)
+    """
+    return {"message": "Sesión cerrada correctamente"}
