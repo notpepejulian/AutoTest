@@ -1,0 +1,401 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Iniciar Sesión - AutoTest" description="Accede a tu cuenta de AutoTest o regístrate para guardar tu progreso">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                    Bienvenido a AutoTest
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400">
+                    Inicia sesión o crea una cuenta para guardar tu progreso
+                </p>
+            </div>
+
+            <!-- Toggle Buttons -->
+            <div class="flex justify-center">
+                <div class="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+                    <button 
+                        id="loginTab" 
+                        class="px-6 py-2 rounded-lg font-medium transition-all duration-200 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
+                    >
+                        Iniciar Sesión
+                    </button>
+                    <button 
+                        id="registerTab" 
+                        class="px-6 py-2 rounded-lg font-medium transition-all duration-200 text-gray-600 dark:text-gray-400"
+                    >
+                        Registrarse
+                    </button>
+                </div>
+            </div>
+
+            <!-- Forms Container -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Login Form -->
+                <div id="loginForm" class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Iniciar Sesión</h3>
+                    
+                    <form id="loginFormElement" class="space-y-6">
+                        <div>
+                            <label for="login-username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Usuario
+                            </label>
+                            <input
+                                type="text"
+                                id="login-username"
+                                name="username"
+                                required
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="tu_usuario"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="login-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Contraseña
+                            </label>
+                            <input
+                                type="password"
+                                id="login-password"
+                                name="password"
+                                required
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="••••••••"
+                            />
+                        </div>
+
+                        <div id="loginError" class="hidden p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm"></div>
+
+                        <button
+                            type="submit"
+                            class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 font-semibold shadow-lg"
+                        >
+                            <span id="loginButtonText">Iniciar Sesión</span>
+                            <span id="loginButtonLoading" class="hidden">Iniciando sesión...</span>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            ¿No tienes cuenta? 
+                            <button id="showRegister" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                                Regístrate aquí
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Crear Cuenta</h3>
+                    
+                    <form id="registerFormElement" class="space-y-4">
+                        <div>
+                            <label for="register-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Email
+                            </label>
+                            <input
+                                type="email"
+                                id="register-email"
+                                name="email"
+                                required
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="tu@email.com"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="register-username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Usuario
+                            </label>
+                            <input
+                                type="text"
+                                id="register-username"
+                                name="username"
+                                required
+                                minlength="3"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="tu_usuario"
+                            />
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Mínimo 3 caracteres</p>
+                        </div>
+
+                        <div>
+                            <label for="register-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Contraseña
+                            </label>
+                            <input
+                                type="password"
+                                id="register-password"
+                                name="password"
+                                required
+                                minlength="6"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                placeholder="••••••••"
+                            />
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Mínimo 6 caracteres</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="register-nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Nombre (opcional)
+                                </label>
+                                <input
+                                    type="text"
+                                    id="register-nombre"
+                                    name="nombre"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    placeholder="Tu nombre"
+                                />
+                            </div>
+
+                            <div>
+                                <label for="register-apellidos" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Apellidos (opcional)
+                                </label>
+                                <input
+                                    type="text"
+                                    id="register-apellidos"
+                                    name="apellidos"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    placeholder="Tus apellidos"
+                                />
+                            </div>
+                        </div>
+
+                        <div id="registerError" class="hidden p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm"></div>
+                        
+                        <div id="registerSuccess" class="hidden p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-sm"></div>
+
+                        <button
+                            type="submit"
+                            class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 font-semibold shadow-lg"
+                        >
+                            <span id="registerButtonText">Crear Cuenta</span>
+                            <span id="registerButtonLoading" class="hidden">Creando cuenta...</span>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            ¿Ya tienes cuenta? 
+                            <button id="showLogin" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                                Inicia sesión aquí
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Info Panel -->
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">¿Por qué registrarse?</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center mt-0.5">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">Guarda tu Progreso</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Accede a tus estadísticas y resultados desde cualquier dispositivo</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center mt-0.5">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">Análisis Personalizado</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Identifica tus puntos débiles y mejora donde más lo necesitas</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center mt-0.5">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">Historial Completo</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Revisa todos tus exámenes anteriores y aprende de tus errores</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-pink-500 flex items-center justify-center mt-0.5">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">Chatbot Ilimitado</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Usuarios registrados: 20 preguntas/día al chatbot (vs 5 anónimos)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-white/50 dark:bg-gray-900/30 rounded-lg">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                            <strong class="text-gray-900 dark:text-white">100% Gratis</strong><br/>
+                            Sin costes ocultos ni suscripciones
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</MainLayout>
+
+<script>
+    const API_URL = 'http://localhost:8000/api';
+
+    // Elementos del DOM
+    const loginTab = document.getElementById('loginTab')!;
+    const registerTab = document.getElementById('registerTab')!;
+    const loginForm = document.getElementById('loginForm')!;
+    const registerForm = document.getElementById('registerForm')!;
+    const loginFormElement = document.getElementById('loginFormElement') as HTMLFormElement;
+    const registerFormElement = document.getElementById('registerFormElement') as HTMLFormElement;
+    const showRegister = document.getElementById('showRegister')!;
+    const showLogin = document.getElementById('showLogin')!;
+
+    // Toggle entre formularios
+    function showLoginForm() {
+        loginTab.className = 'px-6 py-2 rounded-lg font-medium transition-all duration-200 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm';
+        registerTab.className = 'px-6 py-2 rounded-lg font-medium transition-all duration-200 text-gray-600 dark:text-gray-400';
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+    }
+
+    function showRegisterForm() {
+        registerTab.className = 'px-6 py-2 rounded-lg font-medium transition-all duration-200 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm';
+        loginTab.className = 'px-6 py-2 rounded-lg font-medium transition-all duration-200 text-gray-600 dark:text-gray-400';
+        registerForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+    }
+
+    loginTab.addEventListener('click', showLoginForm);
+    registerTab.addEventListener('click', showRegisterForm);
+    showRegister.addEventListener('click', showRegisterForm);
+    showLogin.addEventListener('click', showLoginForm);
+
+    // Manejo del formulario de login
+    loginFormElement.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const loginError = document.getElementById('loginError')!;
+        const loginButtonText = document.getElementById('loginButtonText')!;
+        const loginButtonLoading = document.getElementById('loginButtonLoading')!;
+        
+        loginError.classList.add('hidden');
+        loginButtonText.classList.add('hidden');
+        loginButtonLoading.classList.remove('hidden');
+
+        const formData = new FormData(loginFormElement);
+        
+        try {
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(formData as any)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || 'Error al iniciar sesión');
+            }
+
+            // Guardar token en localStorage
+            localStorage.setItem('autotest_token', data.access_token);
+            localStorage.setItem('autotest_user', JSON.stringify(data.user));
+
+            // Redirigir a la página de tests
+            window.location.href = '/tests';
+        } catch (error: any) {
+            loginError.textContent = error.message;
+            loginError.classList.remove('hidden');
+        } finally {
+            loginButtonText.classList.remove('hidden');
+            loginButtonLoading.classList.add('hidden');
+        }
+    });
+
+    // Manejo del formulario de registro
+    registerFormElement.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const registerError = document.getElementById('registerError')!;
+        const registerSuccess = document.getElementById('registerSuccess')!;
+        const registerButtonText = document.getElementById('registerButtonText')!;
+        const registerButtonLoading = document.getElementById('registerButtonLoading')!;
+        
+        registerError.classList.add('hidden');
+        registerSuccess.classList.add('hidden');
+        registerButtonText.classList.add('hidden');
+        registerButtonLoading.classList.remove('hidden');
+
+        const formData = new FormData(registerFormElement);
+        const data = {
+            email: formData.get('email'),
+            username: formData.get('username'),
+            password: formData.get('password'),
+            nombre: formData.get('nombre') || null,
+            apellidos: formData.get('apellidos') || null
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.detail || 'Error al crear la cuenta');
+            }
+
+            // Mostrar mensaje de éxito
+            registerSuccess.textContent = '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.';
+            registerSuccess.classList.remove('hidden');
+            
+            // Limpiar formulario
+            registerFormElement.reset();
+
+            // Cambiar a formulario de login después de 2 segundos
+            setTimeout(() => {
+                showLoginForm();
+            }, 2000);
+        } catch (error: any) {
+            registerError.textContent = error.message;
+            registerError.classList.remove('hidden');
+        } finally {
+            registerButtonText.classList.remove('hidden');
+            registerButtonLoading.classList.add('hidden');
+        }
+    });
+
+    // Verificar si el usuario ya está autenticado
+    const token = localStorage.getItem('autotest_token');
+    if (token) {
+        // Redirigir a tests si ya está autenticado
+        window.location.href = '/tests';
+    }
+</script>
