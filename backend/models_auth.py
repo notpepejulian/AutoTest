@@ -12,10 +12,8 @@ from passlib.context import CryptContext
 from datetime import datetime
 
 # Importar Base existente o crear nueva
-try:
-    from models import Base
-except ImportError:
-    Base = declarative_base()
+from database import Base
+
 
 # Contexto para hash de contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

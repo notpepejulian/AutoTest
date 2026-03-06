@@ -1,384 +1,544 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+import MainLayout from "../layouts/MainLayout.astro";
 ---
 
-<MainLayout title="Chatbot IA - AutoTest" description="Asistente virtual de AutoTest para resolver tus dudas sobre normativa vial">
-  <div class="max-w-4xl mx-auto">
-    
+<MainLayout
+  title="Asistente IA - AutoTest"
+  description="Interacción técnica con el motor de inteligencia artificial de AutoTest para consultas viales."
+>
+  <div class="max-w-5xl mx-auto px-6">
     <!-- Hero Section -->
-    <section class="text-center py-16 mb-8">
-      <div class="inline-flex items-center px-4 py-2 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-sm font-medium mb-6">
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+    <section class="text-center py-20 mb-12">
+      <div
+        class="inline-flex items-center px-4 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 text-[10px] font-black uppercase tracking-widest mb-8 border border-purple-100 dark:border-purple-800"
+      >
+        <svg
+          class="w-3.5 h-3.5 mr-2 animate-pulse"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
         </svg>
-        🤖 Beta - Asistente IA
+        Neural Engine v2.0 Beta
       </div>
-      
-      <h1 class="text-5xl lg:text-6xl font-bold mb-6">
-        <span class="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
-          Chatbot AutoTest
-        </span>
+
+      <h1
+        class="text-5xl lg:text-7xl font-black mb-10 tracking-tighter text-gray-900 dark:text-white uppercase leading-none"
+      >
+        Cognición <span
+          class="bg-gradient-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent"
+          >Virtual</span
+        >
       </h1>
-      <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-        Tu asistente virtual especializado en normativa vial. Pregúntame sobre señales, infracciones, límites de velocidad y más.
+      <p
+        class="text-lg font-medium text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
+      >
+        Arquitectura de consulta avanzada especializada en la resolución de
+        dilemas técnicos sobre normativa vial y seguridad integral.
       </p>
     </section>
 
-    <!-- Chat Container -->
-    <section class="mb-8">
-      <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 overflow-hidden">
-        
+    <!-- Chat Interface -->
+    <section class="mb-12 relative">
+      <div
+        class="absolute -inset-4 bg-gradient-to-br from-purple-500/10 to-indigo-500/10 rounded-[3rem] blur-3xl opacity-50 -z-10"
+      >
+      </div>
+      <div
+        class="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl shadow-purple-500/5 border border-gray-100 dark:border-gray-800 overflow-hidden"
+      >
         <!-- Chat Header -->
-        <div class="bg-gradient-to-r from-purple-600 to-pink-500 p-4 text-white">
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-              <span class="text-lg">🤖</span>
+        <div
+          class="bg-gray-50 dark:bg-gray-800/50 p-6 border-b border-gray-100 dark:border-gray-800"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <div
+                class="w-12 h-12 bg-white dark:bg-gray-700 rounded-2xl flex items-center justify-center shadow-sm border border-gray-100 dark:border-gray-600"
+              >
+                <svg
+                  class="w-6 h-6 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                <h3
+                  class="font-black text-gray-900 dark:text-white uppercase tracking-tight text-sm"
+                >
+                  Protocolo AutoBot
+                </h3>
+                <div class="flex items-center mt-1">
+                  <span
+                    id="status-indicator"
+                    class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>
+                  <span
+                    class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                    >Enlace Establecido</span
+                  >
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 class="font-semibold">AutoBot</h3>
-              <p class="text-sm text-purple-100">
-                <span id="status-indicator" class="inline-block w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                En línea
-              </p>
+
+            <div class="hidden sm:flex items-center space-x-2">
+              <span
+                class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-[10px] font-black rounded-lg uppercase tracking-tighter"
+                >Latencia: 24ms</span
+              >
             </div>
           </div>
         </div>
 
         <!-- Chat Messages -->
-        <div id="chat-messages" class="h-96 overflow-y-auto p-4 space-y-4">
-          <!-- Welcome Message -->
-          <div class="flex items-start space-x-3">
-            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
-              <span class="text-white text-sm">🤖</span>
+        <div
+          id="chat-messages"
+          class="h-[500px] overflow-y-auto p-8 space-y-8 bg-gray-50/20 dark:bg-gray-900/20"
+        >
+          <!-- Initial System Message -->
+          <div class="flex items-start space-x-4">
+            <div
+              class="w-10 h-10 bg-gray-900 dark:bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg"
+            >
+              <svg
+                class="w-6 h-6 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                ></path>
+              </svg>
             </div>
-            <div class="bg-gray-100 dark:bg-gray-700 rounded-2xl rounded-tl-md p-4 max-w-xs lg:max-w-md">
-              <p class="text-gray-800 dark:text-gray-200">
-                ¡Hola! Soy AutoBot, tu asistente virtual para el examen de autoescuela. 
-                Puedo ayudarte con dudas sobre:
-                <br><br>
-                • 🚦 Señales de tráfico<br>
-                • 📋 Normativa vial<br>
-                • ⚡ Infracciones y sanciones<br>
-                • 🛣️ Límites de velocidad<br>
-                • 🚗 Conceptos básicos de conducción
-                <br><br>
-                ¿En qué puedo ayudarte hoy?
+            <div
+              class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl rounded-tl-md p-6 max-w-sm lg:max-w-xl shadow-sm"
+            >
+              <p
+                class="text-sm font-medium text-gray-600 dark:text-gray-300 leading-relaxed mb-4"
+              >
+                Inicializando sistemas de consulta técnica. Soy AutoBot,
+                optimizado para la resolución de paradigmas en seguridad vial y
+                normativa vigente.
               </p>
+              <div class="space-y-2">
+                <div
+                  class="flex items-center space-x-2 text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest"
+                >
+                  <span class="w-1 h-1 bg-purple-600 rounded-full"></span>
+                  <span>Análisis de Señalización Téxtica</span>
+                </div>
+                <div
+                  class="flex items-center space-x-2 text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest"
+                >
+                  <span class="w-1 h-1 bg-purple-600 rounded-full"></span>
+                  <span>Protocolos de Velocidad Dinámica</span>
+                </div>
+                <div
+                  class="flex items-center space-x-2 text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest"
+                >
+                  <span class="w-1 h-1 bg-purple-600 rounded-full"></span>
+                  <span>Régimen Sancionador y Normativa</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Chat Input -->
-        <div class="border-t border-gray-200 dark:border-gray-700 p-4">
-          <div class="flex space-x-3">
-            <input 
-              type="text" 
+        <div
+          class="p-6 bg-white dark:bg-gray-900 border-t border-gray-50 dark:border-gray-800"
+        >
+          <div class="flex space-x-4">
+            <input
+              type="text"
               id="message-input"
-              placeholder="Escribe tu pregunta sobre normativa vial..."
-              class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 rounded-xl border-none focus:ring-2 focus:ring-purple-500 focus:outline-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              placeholder="Inicie consulta técnica..."
+              class="flex-1 px-8 py-5 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 focus:ring-4 focus:ring-purple-500/10 focus:border-purple-500 focus:outline-none text-sm font-semibold text-gray-900 dark:text-white placeholder-gray-400 transition-all"
               disabled
-            >
-            <button 
+            />
+            <button
               id="send-button"
-              class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-10 py-5 bg-purple-600 text-white rounded-2xl hover:bg-purple-700 transition-all font-black text-sm uppercase tracking-widest disabled:opacity-50 shadow-xl shadow-purple-600/20 active:scale-95"
               disabled
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-              </svg>
+              Consultar
             </button>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- Quick Questions -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-        Preguntas Frecuentes
+    <!-- Contextual Pre-queries -->
+    <section class="mb-20">
+      <h2
+        class="text-xs font-black text-gray-400 uppercase tracking-[0.3em] mb-10 text-center"
+      >
+        Núcleos de Consulta Rápida
       </h2>
-      
-      <div class="grid md:grid-cols-2 gap-4">
-        <button onclick="sendQuickQuestion('¿Cuál es el límite de velocidad en autopistas?')" 
-                class="quick-question p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white/30 dark:border-gray-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all text-left">
-          <div class="flex items-start space-x-3">
-            <span class="text-2xl">🛣️</span>
-            <div>
-              <h3 class="font-medium text-gray-900 dark:text-white">Límites de velocidad</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">¿Cuál es el límite de velocidad en autopistas?</p>
-            </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <button
+          onclick="sendQuickQuestion('¿Cuál es el límite de velocidad en autopistas?')"
+          class="quick-question group p-8 bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800 hover:border-purple-500 transition-all text-left"
+        >
+          <div
+            class="w-10 h-10 bg-purple-50 dark:bg-purple-900/30 text-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg
+            >
           </div>
+          <h3
+            class="font-black text-gray-900 dark:text-white uppercase tracking-tight text-xs mb-2"
+          >
+            Dinámica de Velocidad
+          </h3>
+          <p
+            class="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed"
+          >
+            ¿Límites técnicos en vías de alta capacidad?
+          </p>
         </button>
 
-        <button onclick="sendQuickQuestion('¿Qué significa una señal triangular roja y blanca?')" 
-                class="quick-question p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white/30 dark:border-gray-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all text-left">
-          <div class="flex items-start space-x-3">
-            <span class="text-2xl">🚦</span>
-            <div>
-              <h3 class="font-medium text-gray-900 dark:text-white">Señales de tráfico</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">¿Qué significa una señal triangular roja y blanca?</p>
-            </div>
+        <button
+          onclick="sendQuickQuestion('¿Qué significa una señal triangular roja y blanca?')"
+          class="quick-question group p-8 bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800 hover:border-purple-500 transition-all text-left"
+        >
+          <div
+            class="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg
+            >
           </div>
+          <h3
+            class="font-black text-gray-900 dark:text-white uppercase tracking-tight text-xs mb-2"
+          >
+            Codificación Visual
+          </h3>
+          <p
+            class="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed"
+          >
+            ¿Interpretación de señales de advertencia?
+          </p>
         </button>
 
-        <button onclick="sendQuickQuestion('¿Cuándo es obligatorio usar el cinturón de seguridad?')" 
-                class="quick-question p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white/30 dark:border-gray-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all text-left">
-          <div class="flex items-start space-x-3">
-            <span class="text-2xl">🛡️</span>
-            <div>
-              <h3 class="font-medium text-gray-900 dark:text-white">Seguridad vial</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">¿Cuándo es obligatorio usar el cinturón de seguridad?</p>
-            </div>
+        <button
+          onclick="sendQuickQuestion('¿Cuándo es obligatorio usar el cinturón de seguridad?')"
+          class="quick-question group p-8 bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800 hover:border-purple-500 transition-all text-left"
+        >
+          <div
+            class="w-10 h-10 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-5.618 1.04c-.454 4.07 1.134 7.647 3.618 10.386a11.955 11.955 0 005.618-10.386z"
+              ></path></svg
+            >
           </div>
+          <h3
+            class="font-black text-gray-900 dark:text-white uppercase tracking-tight text-xs mb-2"
+          >
+            Blindaje Operativo
+          </h3>
+          <p
+            class="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed"
+          >
+            ¿Protocolos de uso en sistemas de seguridad?
+          </p>
         </button>
 
-        <button onclick="sendQuickQuestion('¿Qué sanción tiene adelantar en línea continua?')" 
-                class="quick-question p-4 bg-white/60 dark:bg-gray-800/60 rounded-xl border border-white/30 dark:border-gray-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all text-left">
-          <div class="flex items-start space-x-3">
-            <span class="text-2xl">⚠️</span>
-            <div>
-              <h3 class="font-medium text-gray-900 dark:text-white">Infracciones</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">¿Qué sanción tiene adelantar en línea continua?</p>
-            </div>
+        <button
+          onclick="sendQuickQuestion('¿Qué sanción tiene adelantar en línea continua?')"
+          class="quick-question group p-8 bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800 hover:border-purple-500 transition-all text-left"
+        >
+          <div
+            class="w-10 h-10 bg-rose-50 dark:bg-rose-900/30 text-rose-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              ></path></svg
+            >
           </div>
+          <h3
+            class="font-black text-gray-900 dark:text-white uppercase tracking-tight text-xs mb-2"
+          >
+            Marco Sancionador
+          </h3>
+          <p
+            class="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed"
+          >
+            ¿Consecuencias técnico-legales de infracciones?
+          </p>
         </button>
       </div>
     </section>
 
-    <!-- Beta Notice -->
-    <section class="bg-gradient-to-r from-purple-600 to-pink-500 rounded-2xl p-8 text-white text-center">
-      <h2 class="text-3xl font-bold mb-4">🧪 Función en Beta</h2>
-      <p class="text-lg text-purple-100 mb-6 max-w-3xl mx-auto leading-relaxed">
-        Este chatbot está en desarrollo y mejora constantemente. Las respuestas pueden no ser 100% precisas. 
-        Para información oficial, consulta siempre el código de tráfico vigente.
-      </p>
-      <div class="grid md:grid-cols-3 gap-6 mt-8">
-        <div class="text-center">
-          <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-            <span class="text-2xl">🔄</span>
+    <!-- Beta Notice Area -->
+    <section class="max-w-4xl mx-auto pb-24">
+      <div
+        class="bg-gray-900 dark:bg-white rounded-[3rem] p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden"
+      >
+        <div class="absolute inset-0 bg-purple-600/5 pointer-events-none"></div>
+        <div class="relative z-10">
+          <h2
+            class="text-3xl font-black mb-8 text-white dark:text-gray-900 uppercase tracking-tight"
+          >
+            Sincronización Ética y Técnica
+          </h2>
+          <p
+            class="text-lg font-medium text-gray-400 dark:text-gray-500 max-w-2xl mx-auto leading-relaxed mb-12"
+          >
+            Este motor neural se encuentra en fase de aprendizaje adaptativo.
+            Procesamos los datos de tráfico en tiempo real para ofrecer
+            respuestas de alta precisión normativa.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div class="space-y-3">
+              <div class="w-1 h-1 bg-purple-500 rounded-full mx-auto"></div>
+              <h4
+                class="text-[10px] font-black text-white dark:text-gray-900 uppercase tracking-widest"
+              >
+                Modelado Dinámico
+              </h4>
+              <p class="text-[9px] font-bold text-gray-500 uppercase">
+                Ajuste per-interacción
+              </p>
+            </div>
+            <div class="space-y-3">
+              <div class="w-1 h-1 bg-indigo-500 rounded-full mx-auto"></div>
+              <h4
+                class="text-[10px] font-black text-white dark:text-gray-900 uppercase tracking-widest"
+              >
+                Verificación Vial
+              </h4>
+              <p class="text-[9px] font-bold text-gray-500 uppercase">
+                Fuentes oficiales
+              </p>
+            </div>
+            <div class="space-y-3">
+              <div class="w-1 h-1 bg-cyan-500 rounded-full mx-auto"></div>
+              <h4
+                class="text-[10px] font-black text-white dark:text-gray-900 uppercase tracking-widest"
+              >
+                Análisis Sintáctico
+              </h4>
+              <p class="text-[9px] font-bold text-gray-500 uppercase">
+                Procesamiento Natural
+              </p>
+            </div>
           </div>
-          <h4 class="font-semibold mb-2">Aprendizaje Continuo</h4>
-          <p class="text-purple-100 text-sm">El chatbot mejora con cada interacción</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-            <span class="text-2xl">📚</span>
-          </div>
-          <h4 class="font-semibold mb-2">Base de Conocimiento</h4>
-          <p class="text-purple-100 text-sm">Información actualizada del código de tráfico</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-            <span class="text-2xl">💬</span>
-          </div>
-          <h4 class="font-semibold mb-2">Respuestas Naturales</h4>
-          <p class="text-purple-100 text-sm">Conversación fluida con IA avanzada</p>
         </div>
       </div>
     </section>
-
   </div>
 </MainLayout>
 
 <script>
-  // Chat functionality
-  const chatMessages = document.getElementById('chat-messages');
-  const messageInput = document.getElementById('message-input');
-  const sendButton = document.getElementById('send-button');
-  const statusIndicator = document.getElementById('status-indicator');
+  const chatMessages = document.getElementById("chat-messages");
+  const messageInput = document.getElementById(
+    "message-input",
+  ) as HTMLInputElement | null;
+  const sendButton = document.getElementById(
+    "send-button",
+  ) as HTMLButtonElement | null;
+  const statusIndicator = document.getElementById("status-indicator");
 
-  // Simulate loading and enabling chat after page load
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
-      // Enable chat interface
-      messageInput.disabled = false;
-      sendButton.disabled = false;
-      messageInput.placeholder = "Escribe tu pregunta sobre normativa vial...";
-      
-      // Update status
-      statusIndicator.className = "inline-block w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse";
-      
-      // Focus on input
-      messageInput.focus();
-    }, 1000);
+      if (messageInput) messageInput.disabled = false;
+      if (sendButton) sendButton.disabled = false;
+      if (statusIndicator) {
+        statusIndicator.className =
+          "w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse";
+      }
+      messageInput?.focus();
+    }, 1200);
   });
 
-  // Send message function
-  function sendMessage(message) {
+  function sendMessage(message: string) {
     if (!message.trim()) return;
 
-    // Add user message
-    addMessage(message, 'user');
-    
-    // Show typing indicator
+    addMessage(message, "user");
     addTypingIndicator();
-    
-    // Simulate API response after delay
-    setTimeout(() => {
-      removeTypingIndicator();
-      
-      // Generate mock response based on message content
-      const response = generateMockResponse(message);
-      addMessage(response, 'bot');
-    }, 1500 + Math.random() * 2000); // Random delay between 1.5-3.5s
+
+    setTimeout(
+      () => {
+        removeTypingIndicator();
+        const response = generateMockResponse(message);
+        addMessage(response, "bot");
+      },
+      1800 + Math.random() * 1500,
+    );
   }
 
-  // Add message to chat
-  function addMessage(message, sender) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'flex items-start space-x-3';
-    
-    if (sender === 'user') {
-      messageDiv.classList.add('flex-row-reverse', 'space-x-reverse');
+  function addMessage(message: string, sender: "user" | "bot") {
+    const messageDiv = document.createElement("div");
+    messageDiv.className =
+      "flex items-start space-x-4 animate-in fade-in slide-in-from-bottom-2 duration-300";
+
+    if (sender === "user") {
+      messageDiv.classList.add("flex-row-reverse", "space-x-reverse");
       messageDiv.innerHTML = `
-        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center flex-shrink-0">
-          <span class="text-white text-sm">👤</span>
+        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
         </div>
-        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-2xl rounded-tr-md p-4 max-w-xs lg:max-w-md">
-          <p>${message}</p>
+        <div class="bg-blue-600 dark:bg-blue-600 text-white rounded-3xl rounded-tr-md p-6 max-w-sm lg:max-w-xl shadow-xl shadow-blue-500/10">
+          <p class="text-sm font-semibold">${message}</p>
         </div>
       `;
     } else {
       messageDiv.innerHTML = `
-        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
-          <span class="text-white text-sm">🤖</span>
+        <div class="w-10 h-10 bg-gray-900 dark:bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+          <svg class="w-6 h-6 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
         </div>
-        <div class="bg-gray-100 dark:bg-gray-700 rounded-2xl rounded-tl-md p-4 max-w-xs lg:max-w-md">
-          <p class="text-gray-800 dark:text-gray-200">${message}</p>
+        <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl rounded-tl-md p-6 max-w-sm lg:max-w-xl shadow-sm">
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-300 leading-relaxed">${message}</p>
         </div>
       `;
     }
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    chatMessages?.appendChild(messageDiv);
+    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Add typing indicator
   function addTypingIndicator() {
-    const typingDiv = document.createElement('div');
-    typingDiv.id = 'typing-indicator';
-    typingDiv.className = 'flex items-start space-x-3';
+    const typingDiv = document.createElement("div");
+    typingDiv.id = "typing-indicator";
+    typingDiv.className =
+      "flex items-start space-x-4 animate-in fade-in duration-300";
     typingDiv.innerHTML = `
-      <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
-        <span class="text-white text-sm">🤖</span>
+      <div class="w-10 h-10 bg-gray-900 dark:bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+        <svg class="w-6 h-6 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
       </div>
-      <div class="bg-gray-100 dark:bg-gray-700 rounded-2xl rounded-tl-md p-4">
-        <div class="flex space-x-1">
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+      <div class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl rounded-tl-md p-6">
+        <div class="flex space-x-2">
+          <div class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce"></div>
+          <div class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+          <div class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
         </div>
       </div>
     `;
-    
-    chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    chatMessages?.appendChild(typingDiv);
+    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Remove typing indicator
   function removeTypingIndicator() {
-    const typingIndicator = document.getElementById('typing-indicator');
-    if (typingIndicator) {
-      typingIndicator.remove();
-    }
+    const typingIndicator = document.getElementById("typing-indicator");
+    if (typingIndicator) typingIndicator.remove();
   }
 
-  // Generate mock response
-  function generateMockResponse(message) {
-    const responses = {
-      velocidad: "El límite de velocidad varía según el tipo de vía:\n\n• Autopistas: 120 km/h\n• Autovías: 120 km/h\n• Carreteras convencionales: 90 km/h\n• Travesías: 50 km/h\n• Zonas residenciales: 20-30 km/h",
-      
-      señal: "Las señales triangulares con borde rojo son señales de advertencia o peligro. Indican situaciones que requieren precaución especial, como curvas peligrosas, intersecciones, paso de peatones, etc.",
-      
-      cinturón: "El uso del cinturón de seguridad es obligatorio:\n\n• En todos los asientos del vehículo\n• Tanto en ciudad como en carretera\n• Para conductores y pasajeros\n• Los menores de 135cm deben usar sistemas de retención infantil homologados",
-      
-      adelantar: "Adelantar en línea continua es una infracción grave que conlleva:\n\n• Multa de 200€\n• Pérdida de 4 puntos del carnet\n• En casos graves puede considerarse delito contra la seguridad vial",
-      
-      default: "Gracias por tu pregunta. Como chatbot en desarrollo, estoy aprendiendo constantemente. Para información precisa, te recomiendo consultar el código de tráfico oficial o realizar nuestros tests de práctica. ¿Hay algo más específico en lo que pueda ayudarte?"
-    };
-
+  function generateMockResponse(message: string) {
     const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('velocidad') || lowerMessage.includes('límite')) {
-      return responses.velocidad;
-    } else if (lowerMessage.includes('señal') || lowerMessage.includes('triangular')) {
-      return responses.señal;
-    } else if (lowerMessage.includes('cinturón') || lowerMessage.includes('obligatorio')) {
-      return responses.cinturón;
-    } else if (lowerMessage.includes('adelantar') || lowerMessage.includes('línea continua')) {
-      return responses.adelantar;
+
+    if (lowerMessage.includes("velocidad") || lowerMessage.includes("límite")) {
+      return "El análisis normativo indica los siguientes umbrales operativos: Autopistas/Autovías a 120 km/h, Vías Convencionales a 90 km/h, y Entornos Urbanos entre 20 y 50 km/h según la tipología de calzada.";
+    } else if (
+      lowerMessage.includes("señal") ||
+      lowerMessage.includes("triangular")
+    ) {
+      return "Las codificaciones triangulares con orla roja corresponden a Protocolos de Advertencia. Su función es alertar al operador sobre vulnerabilidades del entorno o riesgos dinámicos en la proximidad.";
+    } else if (
+      lowerMessage.includes("cinturón") ||
+      lowerMessage.includes("obligatorio")
+    ) {
+      return "El uso de sistemas de retención es un requisito absoluto en toda la red vial. Esto contempla todos los niveles de ocupación del vehículo y rige bajo cualquier condición de tránsito o velocidad.";
+    } else if (
+      lowerMessage.includes("adelantar") ||
+      lowerMessage.includes("línea continua")
+    ) {
+      return "La transgresión de marcas viales longitudinales continuas se categoriza como Infracción Grave. Conlleva sanciones pecuniarias y la reducción sistemática de 4 unidades de su crédito de habilitación.";
     } else {
-      return responses.default;
+      return "Consulta procesada. Mi base de datos actual se está optimizando para esta temática específica. Recomiendo verificar la sección de Tests Técnicos para una validación empírica de sus conocimientos.";
     }
   }
 
-  // Quick question function
-  function sendQuickQuestion(question) {
-    messageInput.value = question;
-    sendMessage(question);
-    messageInput.value = '';
-  }
+  (window as any).sendQuickQuestion = (question: string) => {
+    if (messageInput) {
+      messageInput.value = question;
+      sendMessage(question);
+      messageInput.value = "";
+    }
+  };
 
-  // Event listeners
-  sendButton.addEventListener('click', () => {
-    const message = messageInput.value.trim();
+  sendButton?.addEventListener("click", () => {
+    const message = messageInput?.value.trim();
     if (message) {
       sendMessage(message);
-      messageInput.value = '';
+      if (messageInput) messageInput.value = "";
     }
   });
 
-  messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      const message = messageInput.value.trim();
+  messageInput?.addEventListener("keypress", (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      const message = messageInput?.value.trim();
       if (message) {
         sendMessage(message);
-        messageInput.value = '';
+        if (messageInput) messageInput.value = "";
       }
     }
-  });
-
-  // Disable quick questions when chat is disabled
-  document.addEventListener('DOMContentLoaded', () => {
-    const quickQuestions = document.querySelectorAll('.quick-question');
-    quickQuestions.forEach(btn => {
-      btn.disabled = true;
-      btn.classList.add('opacity-50');
-    });
-    
-    setTimeout(() => {
-      quickQuestions.forEach(btn => {
-        btn.disabled = false;
-        btn.classList.remove('opacity-50');
-      });
-    }, 1000);
   });
 </script>
 
 <style>
-  /* Smooth scroll for chat messages */
   #chat-messages {
     scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139, 92, 246, 0.2) transparent;
   }
-  
-  /* Custom scrollbar for chat */
   #chat-messages::-webkit-scrollbar {
     width: 4px;
   }
-  
-  #chat-messages::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
   #chat-messages::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 246, 0.3);
-    border-radius: 2px;
-  }
-  
-  #chat-messages::-webkit-scrollbar-thumb:hover {
-    background: rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.2);
+    border-radius: 10px;
   }
 </style>

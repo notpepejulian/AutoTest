@@ -3,7 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 import enum
 
-Base = declarative_base()
+from database import Base
+
 
 class DificultadEnum(str, enum.Enum):
     facil = "facil"
@@ -60,6 +61,8 @@ class Examen(Base):
     categoria_principal_id = Column(Integer, ForeignKey("categorias.id"))
     es_activo = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
+    shuffle_preguntas = Column(Boolean, default=True)
+    shuffle_respuestas = Column(Boolean, default=True)
     
     # Relaciones
     categoria_principal = relationship("Categoria")

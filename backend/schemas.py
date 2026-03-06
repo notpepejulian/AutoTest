@@ -85,6 +85,9 @@ class RespuestaUsuario(BaseModel):
 
 class RespuestasUsuario(BaseModel):
     respuestas: List[RespuestaUsuario]
+    fecha_inicio: Optional[datetime] = None
+    examen_id: Optional[int] = None
+    duracion_segundos: Optional[int] = None
 
 # Esquema para resultado de test
 class ResultadoPregunta(BaseModel):
@@ -110,6 +113,9 @@ class ExamenBase(BaseModel):
     num_preguntas: int = 30
     categoria_principal_id: Optional[int] = None
     es_activo: bool = True
+    shuffle_preguntas: bool = True
+    shuffle_respuestas: bool = True
+
 
 class ExamenCreate(ExamenBase):
     pass
@@ -124,6 +130,48 @@ class Examen(ExamenBase):
 
 class ExamenCompleto(Examen):
     preguntas: List[PreguntaTest] = []
+    
+    class Config:
+        from_attributes = True
+# Esquemas para Historial de Exámenes (Persistencia)
+class DetalleRespuestaBase(BaseModel):
+    pregunta_id: int
+    respuesta_seleccionada_id: Optional[int]
+    respuesta_correcta_id: int
+    es_correcta: bool
+    tiempo_respuesta_segundos: Optional[int] = None
+    orden_en_examen: Optional[int] = None
+
+class DetalleRespuesta(DetalleRespuestaBase):
+    id: int
+    
+    class Config:
+        from_attributes = True
+
+class HistorialExamenBase(BaseModel):
+    nombre_examen: Optional[str] = None
+    categoria_id: Optional[int] = None
+    tipo_examen: str = "examen"
+    total_preguntas: int
+    respuestas_correctas: int
+    respuestas_incorrectas: int
+    porcentaje: float
+    aprobado: bool
+    duracion_segundos: Optional[int] = None
+    fecha_inicio: datetime
+    fecha_finalizacion: datetime
+
+class HistorialExamen(HistorialExamenBase):
+    id: int
+    created_at: datetime
+    detalles_respuestas: List[DetalleRespuesta] = []
+    
+    class Config:
+        from_attributes = True
+
+class HistorialExamenResumen(HistorialExamenBase):
+    id: int
+    created_at: datetime
     
     class Config:
         from_attributes = True

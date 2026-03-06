@@ -10,6 +10,7 @@ from database import engine, get_db
 
 # Importar módulo de autenticación
 import auth_backend
+from utils import fisher_yates_shuffle
 
 # Crear las tablas en la base de datos
 models.Base.metadata.create_all(bind=engine)
@@ -98,47 +99,158 @@ def generar_test(
             detail=f"Solo hay {len(preguntas)} preguntas disponibles para los criterios especificados"
         )
     
+    # Barajar preguntas con Fisher-Yates
+    preguntas = fisher_yates_shuffle(preguntas)
+    
+    # Barajar respuestas de cada pregunta
+    for pregunta in preguntas:
+        if hasattr(pregunta, 'respuestas'):
+            pregunta.respuestas = fisher_yates_shuffle(pregunta.respuestas)
+            
     return preguntas
 
+
 # Endpoint para validar respuestas
+import models_auth
+
 @app.post("/api/validar-respuestas", response_model=schemas.ResultadoTest)
-def validar_respuestas(respuestas: schemas.RespuestasUsuario, db: Session = Depends(get_db)):
+def validar_respuestas(
+    respuestas: schemas.RespuestasUsuario, 
+    db: Session = Depends(get_db),
+    current_user: Optional[auth_backend.Usuario] = Depends(auth_backend.get_current_user)
+):
     resultados = []
     correctas = 0
     
-    for respuesta_usuario in respuestas.respuestas:
-        respuesta_correcta = db.query(models.Respuesta).filter(
-            models.Respuesta.pregunta_id == respuesta_usuario.pregunta_id,
+    # Obtener información del examen si existe
+    examen = None
+    if respuestas.examen_id:
+        examen = db.query(models.Examen).filter(models.Examen.id == respuestas.examen_id).first()
+    
+    for resp_usr in respuestas.respuestas:
+        # Respuesta correcta
+        resp_correcta = db.query(models.Respuesta).filter(
+            models.Respuesta.pregunta_id == resp_usr.pregunta_id,
             models.Respuesta.es_correcta == True
         ).first()
         
-        es_correcta = respuesta_correcta and respuesta_correcta.id == respuesta_usuario.respuesta_id
+        es_correcta = resp_correcta and resp_correcta.id == resp_usr.id_respuesta if hasattr(resp_usr, 'id_respuesta') else (resp_correcta and resp_correcta.id == resp_usr.respuesta_id)
         
         if es_correcta:
             correctas += 1
             
-        pregunta = db.query(models.Pregunta).filter(
-            models.Pregunta.id == respuesta_usuario.pregunta_id
-        ).first()
+        pregunta = db.query(models.Pregunta).filter(models.Pregunta.id == resp_usr.pregunta_id).first()
         
         resultados.append({
-            "pregunta_id": respuesta_usuario.pregunta_id,
-            "respuesta_seleccionada": respuesta_usuario.respuesta_id,
-            "respuesta_correcta": respuesta_correcta.id if respuesta_correcta else None,
+            "pregunta_id": resp_usr.pregunta_id,
+            "respuesta_seleccionada": resp_usr.respuesta_id,
+            "respuesta_correcta": resp_correcta.id if resp_correcta else None,
             "es_correcta": es_correcta,
             "explicacion": pregunta.explicacion if pregunta else None
         })
     
-    porcentaje = (correctas / len(respuestas.respuestas)) * 100 if respuestas.respuestas else 0
+    total = len(respuestas.respuestas)
+    porcentaje = (correctas / total) * 100 if total > 0 else 0
+    aprobado = porcentaje >= 70
+    
+    # PERSISTENCIA PARA USUARIOS AUTENTICADOS
+    if current_user:
+        try:
+            # 1. Crear registro de historial
+            historial = models_auth.HistorialExamen(
+                usuario_id=current_user.id,
+                examen_id=respuestas.examen_id,
+                nombre_examen=examen.nombre if examen else "Práctica Libre",
+                categoria_id=examen.categoria_principal_id if examen else None,
+                tipo_examen="examen" if respuestas.examen_id else "practica",
+                total_preguntas=total,
+                respuestas_correctas=correctas,
+                respuestas_incorrectas=total - correctas,
+                porcentaje=round(porcentaje, 2),
+                aprobado=aprobado,
+                duracion_segundos=respuestas.duracion_segundos,
+                fecha_inicio=respuestas.fecha_inicio or datetime.utcnow(),
+                fecha_finalizacion=datetime.utcnow()
+            )
+            db.add(historial)
+            db.flush() # Para obtener el ID del historial
+            
+            # 2. Guardar detalles de cada respuesta
+            for idx, res in enumerate(resultados):
+                detalle = models_auth.DetalleRespuesta(
+                    historial_examen_id=historial.id,
+                    pregunta_id=res["pregunta_id"],
+                    respuesta_seleccionada_id=res["respuesta_seleccionada"],
+                    respuesta_correcta_id=res["respuesta_correcta"],
+                    es_correcta=res["es_correcta"],
+                    orden_en_examen=idx + 1
+                )
+                db.add(detalle)
+                
+                # 3. Actualizar errores frecuentes si falló
+                if not res["es_correcta"]:
+                    error = db.query(models_auth.ErrorFrecuente).filter(
+                        models_auth.ErrorFrecuente.usuario_id == current_user.id,
+                        models_auth.ErrorFrecuente.pregunta_id == res["pregunta_id"]
+                    ).first()
+                    if error:
+                        error.veces_fallada += 1
+                        error.ultima_vez_fallada = datetime.utcnow()
+                    else:
+                        db.add(models_auth.ErrorFrecuente(
+                            usuario_id=current_user.id,
+                            pregunta_id=res["pregunta_id"],
+                            categoria_id=pregunta.categoria_id if pregunta else None
+                        ))
+            
+            # 4. Actualizar progreso de categoría (si aplica)
+            cat_id = examen.categoria_principal_id if examen else (preguntas[0].categoria_id if preguntas else None)
+            if cat_id:
+                progreso = db.query(models_auth.ProgresoCategoria).filter(
+                    models_auth.ProgresoCategoria.usuario_id == current_user.id,
+                    models_auth.ProgresoCategoria.categoria_id == cat_id
+                ).first()
+                if progreso:
+                    progreso.preguntas_vistas += total
+                    progreso.preguntas_correctas += correctas
+                    progreso.preguntas_incorrectas += (total - correctas)
+                    progreso.porcentaje_acierto = (progreso.preguntas_correctas / progreso.preguntas_vistas) * 100
+                    progreso.ultima_actividad = datetime.utcnow()
+                else:
+                    db.add(models_auth.ProgresoCategoria(
+                        usuario_id=current_user.id,
+                        categoria_id=cat_id,
+                        preguntas_vistas=total,
+                        preguntas_correctas=correctas,
+                        preguntas_incorrectas=total - correctas,
+                        porcentaje_acierto=porcentaje
+                    ))
+            
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print(f"Error al persistir resultados: {e}")
+            # No fallamos la validación si la persistencia falla, pero logueamos
     
     return {
-        "total_preguntas": len(respuestas.respuestas),
+        "total_preguntas": total,
         "correctas": correctas,
-        "incorrectas": len(respuestas.respuestas) - correctas,
+        "incorrectas": total - correctas,
         "porcentaje": round(porcentaje, 2),
-        "aprobado": porcentaje >= 70,  # Criterio de aprobación del 70%
+        "aprobado": aprobado,
         "resultados": resultados
     }
+
+@app.get("/api/auth/me/historial", response_model=List[schemas.HistorialExamenResumen])
+def get_mi_historial(
+    current_user: auth_backend.Usuario = Depends(auth_backend.get_current_user_required),
+    db: Session = Depends(get_db)
+):
+    """Obtiene el historial de exámenes del usuario actual"""
+    return db.query(models_auth.HistorialExamen).filter(
+        models_auth.HistorialExamen.usuario_id == current_user.id
+    ).order_by(models_auth.HistorialExamen.created_at.desc()).all()
+
 
 # Endpoints para exámenes
 @app.get("/api/examenes", response_model=List[schemas.Examen])
@@ -165,7 +277,14 @@ def get_examen_completo(examen_id: int, db: Session = Depends(get_db)):
             models.Pregunta.id == pe.pregunta_id
         ).first()
         if pregunta:
+            # Barajar respuestas si el examen lo requiere
+            if examen.shuffle_respuestas and hasattr(pregunta, 'respuestas'):
+                pregunta.respuestas = fisher_yates_shuffle(pregunta.respuestas)
             preguntas.append(pregunta)
+    
+    # Barajar orden de preguntas si el examen lo requiere
+    if examen.shuffle_preguntas:
+        preguntas = fisher_yates_shuffle(preguntas)
     
     # Crear el objeto de respuesta
     examen_completo = schemas.ExamenCompleto(

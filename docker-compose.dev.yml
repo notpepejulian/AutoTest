@@ -1,0 +1,72 @@
+services:
+  database:
+    image: mariadb:10.11
+    container_name: autotest_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${USER_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - autotest-network
+    healthcheck:
+      test: ["CMD", "mysql", "-h", "localhost", "-u${DATABASE_USER}", "-p${USER_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: autotest_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "8000:8000"
+    networks:
+      - autotest-network
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: autotest_frontend
+    user: "root"
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 80
+    ports:
+      - "4321:80"  # Mapeo: localhost:4321 -> contenedor:80 (para AWS Target Group)
+    networks:
+      - autotest-network
+    depends_on:
+      backend:
+        condition: service_started
+      database:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  db_data:
+
+networks:
+  autotest-network:
+    driver: bridge
