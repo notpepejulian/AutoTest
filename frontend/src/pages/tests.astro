@@ -15,26 +15,13 @@ const token = Astro.cookies.get("access_token")?.value;
       <div
         class="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-8 border border-blue-100 dark:border-blue-800"
       >
-        <svg
-          class="w-4 h-4 mr-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-          ></path>
-        </svg>
-        Módulos de Formación Vial
+        Exámenes de Formación Vial
       </div>
 
       <h1
         class="text-4xl lg:text-6xl font-black mb-6 text-gray-900 dark:text-white leading-tight"
       >
-        Catálogo de <span class="text-blue-600">Entrenamiento</span>
+        Catálogo de <span class="text-blue-600">Tests</span>
       </h1>
       <p
         class="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed"
@@ -81,7 +68,7 @@ const token = Astro.cookies.get("access_token")?.value;
       <div class="mb-12">
         <button
           id="back-to-categories"
-          class="group inline-flex items-center space-x-2 px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all font-semibold text-sm"
+          class="hidden group inline-flex items-center space-x-2 px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-all font-semibold text-sm"
         >
           <svg
             class="w-4 h-4 group-hover:-translate-x-1 transition-transform"
@@ -291,7 +278,6 @@ const token = Astro.cookies.get("access_token")?.value;
     });
 
     function setupEventListeners() {
-      backToCategories?.addEventListener("click", () => showCategories());
       prevPageBtn?.addEventListener("click", () => {
         if (currentPage > 1) {
           currentPage--;
@@ -315,55 +301,17 @@ const token = Astro.cookies.get("access_token")?.value;
         if (!response.ok) throw new Error("API Error");
         const categories = await response.json();
 
-        if (categoriesGrid && categories.length > 0) {
-          categoriesGrid.innerHTML = "";
-          const styles = [
-            {
-              bg: "from-blue-600 to-blue-700",
-              icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
-            },
-            {
-              bg: "from-indigo-600 to-indigo-700",
-              icon: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-            },
-            {
-              bg: "from-cyan-600 to-cyan-700",
-              icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
-            },
-            {
-              bg: "from-slate-700 to-slate-800",
-              icon: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z",
-            },
-            {
-              bg: "from-blue-700 to-cyan-700",
-              icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
-            },
-          ];
+        // Find the mixed category or just use a default one
+        const mixedCat =
+          categories.find((c) => c.nombre.toLowerCase().includes("mixto")) ||
+          categories[0];
 
-          categories.forEach((cat, i) => {
-            const style = styles[i % styles.length];
-            const card = document.createElement("div");
-            card.className =
-              "group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden";
-            card.innerHTML = `
-            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${style.bg} opacity-5 -mr-16 -mt-16 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
-            <div class="relative z-10">
-                <div class="w-14 h-14 bg-gradient-to-br ${style.bg} rounded-xl shadow-lg flex items-center justify-center text-white mb-6 transform group-hover:rotate-6 transition-transform">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${style.icon}" /></svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">${cat.nombre}</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed line-clamp-2">${cat.descripcion || "Contenido especializado para el aprendizaje integral."}</p>
-                <div class="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-gray-700">
-                    <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Explorar Módulo</span>
-                    <svg class="w-4 h-4 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                </div>
-            </div>
-          `;
-            card.addEventListener("click", () => showCategoryTests(cat, style));
-            categoriesGrid.appendChild(card);
+        if (mixedCat) {
+          showCategoryTests(mixedCat, {
+            bg: "from-blue-600 to-blue-700",
+            icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
           });
         }
-        showCategories();
       } catch (e) {
         console.error(e);
         showError();

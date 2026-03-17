@@ -490,7 +490,7 @@ try {
                             <div class="flex justify-between items-start mb-4">
                                 <span class="text-[10px] font-black ${res.es_correcta ? "text-green-600" : "text-red-600"} uppercase tracking-widest">Pregunta ${i + 1} — ${res.es_correcta ? "Correcta" : "Error"}</span>
                             </div>
-                            <p class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-6 leading-snug">${q ? q.texto_pregunta : "Desconocida"}</p>
+                            <p class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-6 leading-snug">${q ? q.texto_pregunta : "Cargando texto de la pregunta..."}</p>
                             ${res.explicacion ? `<div class="p-4 bg-white dark:bg-gray-900/50 rounded-2xl text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-50 dark:border-gray-700 leading-relaxed"><span class="block text-[8px] font-black uppercase tracking-tighter text-blue-500 mb-1">Análisis técnico</span>${res.explicacion}</div>` : ""}
                         </div>
                     `;

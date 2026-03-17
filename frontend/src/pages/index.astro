@@ -30,19 +30,6 @@ import MainLayout from "../layouts/MainLayout.astro";
         <div
             class="inline-flex items-center px-5 py-2.5 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-xs font-black uppercase tracking-widest mb-10 border border-blue-100 dark:border-blue-800/30"
         >
-            <svg
-                class="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2.5"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04M12 2.944a11.952 11.952 0 00-6.812 4.411m13.624 0A11.952 11.952 0 0012 2.944M2.957 10.469a11.952 11.952 0 003.451 8.3m11.182 0a11.952 11.952 0 003.451-8.3m-12.734 0a11.952 11.952 0 003.078 0m9.984 0a11.952 11.952 0 00-3.078 0M8 8.483V7a1 1 0 012 0v1.517a1 1 0 001 1h2a1 1 0 001-1V7a1 1 0 012 0v1.483a1 1 0 00.551.894l2 1a1 1 0 01.373 1.48l-2 3A1 1 0 0115 15H9a1 1 0 01-.924-.618l-2-3.5a1 1 0 011.373-1.48l2 1a1 1 0 00.551-.894z"
-                ></path>
-            </svg>
             Sistemas de Evaluación Homologados
         </div>
 
@@ -73,7 +60,7 @@ import MainLayout from "../layouts/MainLayout.astro";
                 class="group relative inline-flex items-center px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl transition-all duration-300 font-bold text-lg shadow-2xl hover:scale-105 active:scale-95 overflow-hidden"
             >
                 <span class="relative z-10 flex items-center">
-                    COMENZAR EVALUACIÓN
+                    COMENZAR
                     <svg
                         class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform"
                         fill="none"
@@ -97,175 +84,179 @@ import MainLayout from "../layouts/MainLayout.astro";
     </section>
 
     <!-- Estadísticas -->
-    <section
-        class="relative py-12 px-6 sm:px-8 bg-white dark:bg-gray-900 rounded-3xl sm:rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-sm mb-24 overflow-hidden"
-    >
-        <div
-            class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 max-w-6xl mx-auto relative z-10"
-        >
-            <div class="text-center">
-                <div
-                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1"
+    <section id="features" class="py-24 bg-white dark:bg-gray-950">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-3xl mx-auto mb-20 text-center">
+                <h2
+                    class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 tracking-tighter uppercase"
                 >
-                    Activos Disponibles
-                </div>
-                <div
-                    class="text-4xl font-black text-gray-900 dark:text-white tracking-tighter"
+                    Características <span class="text-blue-600"
+                        >Principales</span>
+                </h2>
+                <p
+                    class="text-gray-500 dark:text-gray-400 font-medium text-lg leading-relaxed"
                 >
-                    3,000+
-                </div>
+                    Tecnología de vanguardia diseñada para maximizar tu
+                    rendimiento y garantizar resultados excepcionales en tu
+                    formación vial.
+                </p>
             </div>
-            <div class="text-center">
+
+            <div class="grid md:grid-cols-3 gap-8">
                 <div
-                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1"
+                    class="group p-10 bg-gray-50 dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 hover:border-blue-500/30 transition-all duration-500"
                 >
-                    Categorías
+                    <div
+                        class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-blue-600/20 group-hover:scale-110 transition-transform mx-auto"
+                    >
+                        <svg
+                            class="w-8 h-8"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            ><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg
+                        >
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-tight"
+                    >
+                        IA Adaptativa
+                    </h3>
+                    <p
+                        class="text-gray-500 dark:text-gray-400 leading-relaxed font-medium"
+                    >
+                        Algoritmos que identifican tus puntos débiles y
+                        refuerzan el aprendizaje de manera inteligente.
+                    </p>
                 </div>
+
                 <div
-                    class="text-4xl font-black text-gray-900 dark:text-white tracking-tighter"
+                    class="group p-10 bg-gray-50 dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 hover:border-indigo-500/30 transition-all duration-500"
                 >
-                    5
+                    <div
+                        class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-indigo-600/20 group-hover:scale-110 transition-transform mx-auto"
+                    >
+                        <svg
+                            class="w-8 h-8"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            ><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            ></path></svg
+                        >
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-tight"
+                    >
+                        Simulación HQ
+                    </h3>
+                    <p
+                        class="text-gray-500 dark:text-gray-400 leading-relaxed font-medium"
+                    >
+                        Interfaz de examen idéntica a la oficial para reducir la
+                        ansiedad y mejorar la familiaridad.
+                    </p>
                 </div>
-            </div>
-            <div class="text-center">
+
                 <div
-                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1"
+                    class="group p-10 bg-gray-50 dark:bg-gray-900 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 hover:border-cyan-500/30 transition-all duration-500"
                 >
-                    Módulos de Test
-                </div>
-                <div
-                    class="text-4xl font-black text-gray-900 dark:text-white tracking-tighter"
-                >
-                    50+
-                </div>
-            </div>
-            <div class="text-center">
-                <div
-                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1"
-                >
-                    Uptime de Red
-                </div>
-                <div class="text-4xl font-black text-blue-600 tracking-tighter">
-                    99.9%
+                    <div
+                        class="w-16 h-16 bg-cyan-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-cyan-600/20 group-hover:scale-110 transition-transform mx-auto"
+                    >
+                        <svg
+                            class="w-8 h-8"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            ><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                            ></path></svg
+                        >
+                    </div>
+                    <h3
+                        class="text-xl font-bold text-gray-900 dark:text-white mb-4 uppercase tracking-tight"
+                    >
+                        Analítica Pro
+                    </h3>
+                    <p
+                        class="text-gray-500 dark:text-gray-400 leading-relaxed font-medium"
+                    >
+                        Métricas detalladas de tu progreso con predicción de
+                        éxito basada en datos históricos.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Características principales -->
-    <section class="mb-24">
-        <div
-            class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6"
-        >
-            <div class="max-w-xl">
-                <h2
-                    class="text-4xl font-black text-gray-900 dark:text-white tracking-tight mb-4 uppercase"
-                >
-                    Estándares Profesionales
-                </h2>
-                <p class="text-gray-500 font-medium">
-                    AutoTest integra las metodologías más avanzadas para
-                    garantizar el éxito académico.
-                </p>
-            </div>
-            <div class="hidden md:block w-24 h-px bg-gray-200 dark:bg-gray-800">
-            </div>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
+    <!-- Stats Section -->
+    <section
+        class="py-24 bg-gray-50/50 dark:bg-gray-900/50 border-y border-gray-100 dark:border-gray-800 text-center"
+    >
+        <div class="container mx-auto px-6">
             <div
-                class="group bg-white dark:bg-gray-800 p-10 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 hover:border-blue-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/5"
+                class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12"
             >
-                <div
-                    class="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 rounded-2xl items-center justify-center flex mb-8 text-blue-600 group-hover:scale-110 transition-transform"
-                >
-                    <svg
-                        class="w-7 h-7"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        ><path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2.5"
-                            d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg
+                <div>
+                    <div
+                        class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tighter"
                     >
-                </div>
-                <h3
-                    class="text-2xl font-black mb-4 text-gray-900 dark:text-white uppercase tracking-tight"
-                >
-                    Instantaneidad
-                </h3>
-                <p
-                    class="text-gray-500 dark:text-gray-400 font-medium leading-relaxed"
-                >
-                    Sistemas de validación en milisegundos. Obtenga
-                    retroalimentación técnica inmediata tras cada interacción.
-                </p>
-            </div>
-
-            <div
-                class="group bg-white dark:bg-gray-800 p-10 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 hover:border-cyan-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/5"
-            >
-                <div
-                    class="w-14 h-14 bg-cyan-50 dark:bg-cyan-900/30 rounded-2xl items-center justify-center flex mb-8 text-cyan-600 group-hover:scale-110 transition-transform"
-                >
-                    <svg
-                        class="w-7 h-7"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        ><path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2.5"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                        ></path></svg
+                        98%
+                    </div>
+                    <div
+                        class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]"
                     >
+                        Éxito Real
+                    </div>
                 </div>
-                <h3
-                    class="text-2xl font-black mb-4 text-gray-900 dark:text-white uppercase tracking-tight"
-                >
-                    Analítica
-                </h3>
-                <p
-                    class="text-gray-500 dark:text-gray-400 font-medium leading-relaxed"
-                >
-                    Desglose detallado de competencias por área temática.
-                    Identificación predictiva de patrones de error.
-                </p>
-            </div>
-
-            <div
-                class="group bg-white dark:bg-gray-800 p-10 rounded-[2.5rem] border border-gray-100 dark:border-gray-700 hover:border-purple-500/30 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/5"
-            >
-                <div
-                    class="w-14 h-14 bg-purple-50 dark:bg-purple-900/20 rounded-2xl items-center justify-center flex mb-8 text-purple-600 group-hover:scale-110 transition-transform"
-                >
-                    <svg
-                        class="w-7 h-7"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        ><path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2.5"
-                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                        ></path></svg
+                <div>
+                    <div
+                        class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tighter"
                     >
+                        +5k
+                    </div>
+                    <div
+                        class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]"
+                    >
+                        Candidatos
+                    </div>
                 </div>
-                <h3
-                    class="text-2xl font-black mb-4 text-gray-900 dark:text-white uppercase tracking-tight"
-                >
-                    Integridad
-                </h3>
-                <p
-                    class="text-gray-500 dark:text-gray-400 font-medium leading-relaxed"
-                >
-                    Sincronización continua con bases de datos oficiales.
-                    Cumplimiento estricto de normativas vigentes.
-                </p>
+                <div>
+                    <div
+                        class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tighter"
+                    >
+                        24/7
+                    </div>
+                    <div
+                        class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]"
+                    >
+                        Soporte AI
+                    </div>
+                </div>
+                <div>
+                    <div
+                        class="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 tracking-tighter"
+                    >
+                        +30k
+                    </div>
+                    <div
+                        class="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]"
+                    >
+                        Tests HQ
+                    </div>
+                </div>
             </div>
         </div>
     </section>
